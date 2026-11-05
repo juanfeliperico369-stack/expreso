@@ -10,11 +10,12 @@
 <meta property="og:title" content="Expreso · Café con Ganoderma en Colombia">
 <meta property="og:description" content="Qué es el Ganoderma, qué dice la ciencia y cómo disfrutarlo. Catálogo y pedidos por WhatsApp.">
 <meta property="og:locale" content="es_CO">
-<!-- CONFIGURAR al publicar: <link rel="canonical" href="https://TU-DOMINIO/"> y <meta property="og:image" content="https://TU-DOMINIO/og.jpg"> -->
+<!-- DOMINIO: se llena solo con  python3 tools/set_domain.py https://tu-dominio.com --><!-- /DOMINIO -->
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23134a72'/%3E%3Cpath d='M14 28h36c0 12-8 20-18 20S14 40 14 28z' fill='%23fbe8a8'/%3E%3Cpath d='M30 12c-3 4 3 6 0 10M37 12c-3 4 3 6 0 10' stroke='%23fbe8a8' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
 <script>(function(){var d=document.documentElement,t=null;try{t=JSON.parse(localStorage.getItem('expreso.tema'))}catch(e){}if(['revista','cafe','bosque','contraste'].indexOf(t)<0){t=window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'cafe':'revista'}d.setAttribute('data-theme',t);d.classList.add('js')})();</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Store","name":"Expreso","description":"Distribuidor independiente de productos Gano Excel en Colombia: café, bebidas y suplementos con Ganoderma lucidum.","areaServed":"CO","currenciesAccepted":"COP","priceRange":"$96.900 - $424.500"}</script>
 <style>
@@ -308,6 +309,18 @@ dialog::backdrop{background:rgba(0,0,0,.55);backdrop-filter:blur(3px)}
 .vgrid{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
 @media (max-width:520px){.vgrid{grid-template-columns:1fr}}
 
+.mag{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;margin-top:1rem}
+@media (max-width:820px){.mag{grid-template-columns:1fr}}
+.art{border-top:6px solid var(--line);padding-top:.6rem}
+.art-n{margin:0;font:400 4rem/.9 var(--fd);color:transparent;-webkit-text-stroke:2px var(--accent)}
+.art h3{margin:.3rem 0 .2rem;font:400 2rem/1 var(--fd);letter-spacing:.02em;color:var(--brand)}
+.art-l{margin:0 0 .6rem;font:italic 400 .98rem/1.5 var(--fserif);color:var(--muted)}
+.art summary{cursor:pointer;min-height:44px;display:inline-flex;align-items:center;font-weight:800;font-size:.78rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);list-style:none}
+.art summary::-webkit-details-marker{display:none}
+.art summary::after{content:" +";white-space:pre}
+.art details[open] summary::after{content:" −"}
+.art details p{font-size:.93rem;margin:.2rem 0 .7rem}
+
 /* ============ ANIMACIÓN ============ */
 .js .rv{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
 .js .rv.in{opacity:1;transform:none}
@@ -463,6 +476,40 @@ dialog::backdrop{background:rgba(0,0,0,.55);backdrop-filter:blur(3px)}
   </div>
   <p class="kicker">Expreso TV · videos cortos que explican sin rodeos</p>
   <div class="tv" id="tv"></div>
+
+  <p class="kicker" id="revista">Revista Expreso · Edición 01</p>
+  <div class="mag">
+   <article class="art rv" id="a-micelio">
+    <p class="art-n" aria-hidden="true">01</p>
+    <h3>¿Hongo o micelio?</h3>
+    <p class="art-l">Las dos formas del Ganoderma que vas a encontrar en una etiqueta.</p>
+    <details><summary>Leer</summary>
+     <p>El <strong>cuerpo fructífero</strong> es el hongo que se ve: una "oreja" rojiza y brillante que crece sobre la madera. El <strong>micelio</strong> es la red de filamentos de la que nace, algo parecido a sus raíces.</p>
+     <p>Los extractos se pueden hacer de uno o del otro, y su composición no es igual: depende de la parte del hongo, de cómo se cultiva y de cómo se extrae.</p>
+     <p>Según el fabricante, las Cápsulas de Ganoderma usan extracto del hongo y Excellium usa micelio. Por eso son productos distintos y no uno "mejor" que el otro.</p>
+    </details>
+   </article>
+   <article class="art rv" id="a-cafeina">
+    <p class="art-n" aria-hidden="true">02</p>
+    <h3>Cafeína: ¿cuánto es mucho?</h3>
+    <p class="art-l">El número que conviene conocer si tomas café todos los días.</p>
+    <details><summary>Leer</summary>
+     <p>Para adultos sanos, la Autoridad Europea de Seguridad Alimentaria (EFSA) considera seguro hasta <strong>400 mg de cafeína al día</strong>, y hasta 200 mg de una sola vez. En embarazo y lactancia el límite baja a <strong>200 mg al día</strong>.</p>
+     <p>Como referencia, la EFSA calcula unos 90 mg en una taza de café filtrado (200 ml) y unos 80 mg en un espresso (60 ml). El contenido real cambia según el café y la preparación.</p>
+     <p>¿Buscas algo para la noche? El Rooibos no tiene cafeína. <a href="https://doi.org/10.2903/j.efsa.2015.4102" target="_blank" rel="noopener">Fuente: EFSA 2015 ↗</a></p>
+    </details>
+   </article>
+   <article class="art rv" id="a-etiqueta">
+    <p class="art-n" aria-hidden="true">03</p>
+    <h3>Lee la etiqueta como experto</h3>
+    <p class="art-l">Tres segundos para saber si un suplemento es legal en Colombia.</p>
+    <details><summary>Leer</summary>
+     <p>Los alimentos, suplementos y cosméticos que se venden en Colombia necesitan un registro o notificación sanitaria del INVIMA. Busca el código en el empaque: <strong>RSA</strong> o <strong>NSA</strong> en alimentos, <strong>SD</strong> en suplementos dietarios y <strong>NSOC</strong> en cosméticos.</p>
+     <p>Señales de alerta: no tiene código, promete curar enfermedades o se presenta como "medicamento natural". En Colombia, un suplemento no puede anunciarse como cura.</p>
+     <p>Por eso, en cada ficha de Expreso encuentras el código sanitario del producto, cuando el fabricante lo reporta. Puedes verificarlo en la consulta pública de <a href="https://www.invima.gov.co" target="_blank" rel="noopener">invima.gov.co ↗</a>.</p>
+    </details>
+   </article>
+  </div>
  </div>
 </section>
 

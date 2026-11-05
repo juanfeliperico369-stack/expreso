@@ -9,5 +9,6 @@ Tienda web de café y productos con Ganoderma lucidum (Gano Excel) para Colombia
 
 ```bash
 python3 tools/inline_imgs.py   # vuelve a incrustar las fotos de assets/img
+python3 tools/set_domain.py https://tu-dominio.com   # al publicar: SEO + robots + sitemap
 node tools/test_site.js        # pruebas automáticas (Playwright)
 ```

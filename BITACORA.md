@@ -23,6 +23,9 @@
 | `assets/img/*.webp` | Fotos originales optimizadas. `p-<id>` = producto, `h-<nombre>` = foto de sección. |
 | `tools/inline_imgs.py` | Vuelve a meter las fotos de `assets/img/` dentro de `index.html`. Correr después de agregar o cambiar fotos. |
 | `tools/test_site.js` | Pruebas automáticas con Playwright. `node tools/test_site.js` (opcional `--shots carpeta` para capturas). |
+| `tools/set_domain.py` | `python3 tools/set_domain.py https://tu-dominio.com` llena canonical/og:image en `index.html` y crea `robots.txt` + `sitemap.xml`. |
+| `_headers` | Cabeceras de seguridad y caché (Cloudflare Pages / Netlify las aplican solas). |
+| `assets/og.jpg` | Imagen de 1200×630 que aparece al compartir el enlace (WhatsApp, Facebook). |
 | `GUIA-NEGOCIO.md` | Estrategia y costos del negocio online. |
 | `docs/EVIDENCIA.md` | Resumen científico con referencias verificadas y reglas de publicidad honesta. |
 | `BITACORA.md` | Este archivo. |
@@ -85,7 +88,7 @@
 
 1. ⚠️ Poner el número real de WhatsApp en `CONFIG.whatsapp`.
 2. ⚠️ Confirmar el permiso de las fotos y los códigos INVIMA.
-3. Comprar un dominio y publicar en **Cloudflare Pages** o Netlify (gratis). **No usar GitHub Pages**: sus condiciones prohíben las tiendas online (ver la guía, sección 5). Luego activar `canonical` y `og:image` (están comentados en el `<head>`).
+3. Publicar (15 min): comprar un dominio → Cloudflare Pages → "Create project" → conectar este repo de GitHub (rama principal, sin comando de build, carpeta raíz `/`) → agregar el dominio personalizado → correr `python3 tools/set_domain.py https://tu-dominio.com`, hacer commit y push. **No usar GitHub Pages** (sus términos prohíben tiendas online).
 4. Definir la tarifa de envío (`CONFIG.envio`) y los tiempos reales de la transportadora.
 4b. Dropshipping: abrir una cuenta en la plataforma elegida, escoger 3 a 5 accesorios, poner `precio` y foto (`assets/img/p-<id>.webp`) y quitar `estado:'proximamente'`.
 5. Crear las redes y pegar sus URL en `CONFIG.redes`. Publicar los primeros videos y pegar sus URL en `VIDEOS`.
@@ -145,3 +148,15 @@ Tarea de hoy: <...>
 8. Bloque "01 Elige · 02 Envía · 03 Recibe" bajo el catálogo, para generar confianza.
 9. Panel interno `#vendedor`: calculadora de margen y ROAS de equilibrio, con la misma lógica de la guía §2b.
 10. Pruebas: 49 verificaciones de `tools/test_site.js` pasan, con nuevas pruebas para cada función y sin errores de consola.
+
+### Sesión 4 · 2026-11-05 · v0.4 (contenido + listo para publicar)
+1. "Revista Expreso · Edición 01" en la sección Ritual: 3 artículos que se despliegan (`<details>`, texto en el HTML para que Google lo lea): hongo vs micelio, límites de cafeína (EFSA) y cómo leer el código INVIMA.
+2. Las fuentes de Google ya no bloquean la carga (`media="print" onload`, con `<noscript>` de respaldo).
+3. `tools/set_domain.py`: un comando deja listo el SEO del dominio (canonical, og:url, og:image, twitter:card, robots.txt, sitemap.xml). Valida el formato del dominio y se puede repetir.
+4. `_headers`: nosniff, Referrer-Policy, Permissions-Policy, HSTS, CSP `frame-ancestors 'none'` y caché de assets por 7 días.
+5. `assets/og.jpg` (1200×630, 83 KB) con la estética de la portada, para la vista previa en WhatsApp y redes.
+6. Se probó `set_domain.py` en una copia: idempotente y rechaza dominios inválidos o sin https.
+7. Nuevas pruebas: 3 artículos que se despliegan y sin scroll horizontal a 1000 px (menú de escritorio).
+8. `node tools/test_site.js`: todas las pruebas pasan.
+9. Falta: publicar con el dominio real y correr `set_domain.py`.
+10. Siguiente: más artículos de la revista (uno por cada video publicado) y combos cuando estén los márgenes.

@@ -144,6 +144,12 @@ const ok = (cond, msg) => { console.log((cond ? '  ✔ ' : '  ✘ ') + msg); if 
   ok(await p3.isVisible('#vendedor') && /\$\s?27\.19\d/.test(await p3.textContent('#vendOut')), 'calculadora del vendedor: utilidad antes de pauta = $27.194');
   await p3.fill('#vendForm [name=ent]', '60');
   ok(/\$\s?8\.316/.test(await p3.textContent('#vendOut')), 'calculadora recalcula con 60 % de entrega');
+  await p3.keyboard.press('Escape'); await p3.waitForTimeout(150);
+  await p3.setViewportSize({ width: 1000, height: 800 });
+  ok(await p3.evaluate(() => document.documentElement.scrollWidth) <= 1000, 'sin scroll horizontal a 1000px (menú de escritorio)');
+  ok(await p3.locator('.art details').count() === 3, 'revista: 3 artículos');
+  await p3.click('#a-cafeina summary');
+  ok(/400 mg/.test(await p3.textContent('#a-cafeina details')) && await p3.isVisible('#a-cafeina details p'), 'artículo se despliega');
   await c3.close();
 
   // ---------- Móvil, todos los temas ----------
