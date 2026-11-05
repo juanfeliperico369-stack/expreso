@@ -34,7 +34,7 @@ const ok = (cond, msg) => { console.log((cond ? '  ✔ ' : '  ✘ ') + msg); if 
   await page.goto(URL, { waitUntil: 'load' });
   console.log('Carga y estructura');
   const n = await page.locator('#grid .card').count();
-  ok(n === 18, `18 productos renderizados (${n})`);
+  ok(n === 21, `21 productos renderizados: 18 + 3 próximamente (${n})`);
   const blank = await page.$$eval('#grid img', ims => ims.filter(i => !i.src.startsWith('data:image/webp') || i.naturalWidth < 10).length);
   ok(blank === 0, `todas las fotos de producto cargan (${blank} sin foto)`);
   ok(await page.$$eval('img:not([alt])', x => x.length) === 0, 'toda <img> tiene alt');
@@ -47,6 +47,9 @@ const ok = (cond, msg) => { console.log((cond ? '  ✔ ' : '  ✘ ') + msg); if 
   console.log('Catálogo');
   await page.click('[data-chip="suplementos"]');
   ok(await page.locator('#grid .card').count() === 4, 'filtro Suplementos = 4');
+  await page.click('[data-chip="accesorios"]');
+  ok(await page.locator('#grid .card.soon').count() === 3 && await page.locator('#grid [data-add]').count() === 0, 'Accesorios = 3 próximamente, sin botón Agregar');
+  ok(/wa\.me\/.*DS-PRENSA/.test(await page.getAttribute('#grid .card.soon a.btn', 'href')), 'Avísame abre WhatsApp con SKU');
   await page.click('[data-chip="todos"]');
   await page.fill('#q', 'chocolate'); await page.waitForTimeout(250);
   ok(await page.locator('#grid .card').count() === 3, 'búsqueda "chocolate" = 3');
@@ -54,7 +57,7 @@ const ok = (cond, msg) => { console.log((cond ? '  ✔ ' : '  ✘ ') + msg); if 
   ok(await page.locator('#grid .empty').count() === 1, 'búsqueda sin resultados muestra aviso');
   await page.fill('#q', ''); await page.waitForTimeout(250);
   await page.selectOption('#orden', 'asc');
-  const precios = await page.$$eval('#grid .precio b', b => b.map(x => Number(x.textContent.replace(/\D/g, ''))));
+  const precios = await page.$$eval('#grid .precio b', b => b.map(x => x.textContent.replace(/\D/g, '')).filter(Boolean).map(Number));
   ok(precios.every((p, i) => i === 0 || precios[i - 1] <= p), 'orden por precio ascendente');
   await page.selectOption('#orden', 'rel');
 
@@ -79,7 +82,7 @@ const ok = (cond, msg) => { console.log((cond ? '  ✔ ' : '  ✘ ') + msg); if 
   const wa = await page.evaluate(() => window.__wa[0] || '');
   const msg = decodeURIComponent(wa.split('text=')[1] || '');
   ok(wa.startsWith('https://wa.me/573000000000?text='), 'abre WhatsApp con el número configurado');
-  ok(msg.includes('2 × Tinto Clásico') && msg.includes('1 × Cápsulas de Ganoderma') && /Total: \$\s?628\.300/.test(msg) && msg.includes('Medellín'), 'mensaje del pedido completo');
+  ok(msg.includes('2 × Tinto Clásico [GX-TINTO]') && msg.includes('1 × Cápsulas de Ganoderma') && /Total: \$\s?628\.300/.test(msg) && msg.includes('Medellín'), 'mensaje del pedido completo');
   if (shotsDir) await page.screenshot({ path: path.join(shotsDir, 'desk-cart.png') });
   await page.keyboard.press('Escape');
   await page.click('#cartBtn');

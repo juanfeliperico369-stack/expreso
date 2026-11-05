@@ -48,7 +48,11 @@
 ## 4. Cómo editar (todo está al inicio del `<script>` en `index.html`)
 
 1. **`CONFIG`**: número de WhatsApp (**hoy es el placeholder `573000000000`: REEMPLAZAR**), costo de envío (`null` = "se confirma según ciudad"), envío gratis desde, tiempo de envío, métodos de pago y URL de redes.
-2. **`PRODUCTOS`**: un objeto por producto (`id, cat, nombre, linea, precio, tag, desc, contiene[], uso, nota, invima`). Para un producto nuevo: copia un objeto, guarda la foto como `assets/img/p-<id>.webp` (unos 440 px, WebP) y corre `python3 tools/inline_imgs.py`.
+2. **`PRODUCTOS`**: un objeto por producto (`id, cat, nombre, linea, precio, tag, desc, contiene[], uso, nota, invima`, y opcionalmente `proveedor`, `sku`, `estado`).
+   - `proveedor`: `'gano'` (reventa Gano Excel, el valor por defecto) o `'drop'` (dropshipping). Están definidos en **`PROVEEDORES`**.
+   - `sku`: si no lo pones, se arma solo (`GX-TINTO`, `DS-PRENSA`). **El SKU sale en el mensaje de WhatsApp** del pedido: así sabes a quién comprarle cada producto.
+   - `estado:'proximamente'` + `precio:null`: el producto se muestra con el botón "Avísame" (abre WhatsApp con el SKU) y no entra al carrito. Sirve para **medir la demanda antes de conseguir proveedor**.
+   Para un producto nuevo: copia un objeto, guarda la foto como `assets/img/p-<id>.webp` (unos 440 px, WebP) y corre `python3 tools/inline_imgs.py`.
 3. **`CATS`**: categorías. Si agregas una, agrega también un chip; el banner de foto es opcional.
 4. **`CIENCIA`, `MITOS`, `SEGURIDAD`**: entre los marcadores `/* <CIENCIA> */`. Su fuente es `docs/EVIDENCIA.md`. **Solo citas verificadas.**
 5. **`VIDEOS`**: pega la URL de cada video de TikTok, Reels o YouTube en `url` y la tarjeta cambia de "Pronto" a "Ver".
@@ -65,6 +69,8 @@
 - **Fotos tomadas del catálogo de "Visión Continental".** ⚠️ Falta confirmar el permiso de uso (a través del amigo del dueño). Si no hay permiso, reemplazarlas por fotos propias.
 - **Códigos INVIMA** copiados del volante de Gano Excel. ⚠️ Verificarlos en https://consultaregistro.invima.gov.co (sobre todo Excellium `SD2014-0003368`, que en el volante sale cortado como "D2014-…"). Shoko Rico, Gano Soap, Transparent Soap y Reskine no tenían código en el material.
 - **Precios** = "precio sugerido" del catálogo, en noviembre de 2026.
+- **El dropshipping cabe en el mismo catálogo.** Los productos de Gano Excel son reventa; los accesorios (prensa francesa, termo, taza) son de prueba para dropshipping, con estado "Próximamente" y sin precio inventado hasta confirmar el proveedor (por ejemplo, Dropi). La estrategia completa está en `GUIA-NEGOCIO.md`, sección 2b.
+- **Ciencia:** las 11 citas de la web están verificadas en PubMed (la de la EFSA va por DOI). Los textos se escribieron de nuevo de forma honesta. Resumen y fuentes: `docs/EVIDENCIA.md`.
 
 ## 6. Pendientes (por prioridad)
 
@@ -72,6 +78,7 @@
 2. ⚠️ Confirmar el permiso de las fotos y los códigos INVIMA.
 3. Comprar un dominio y publicar (GitHub Pages, Netlify o Cloudflare Pages son gratis). Luego activar `canonical` y `og:image` (están comentados en el `<head>`).
 4. Definir la tarifa de envío (`CONFIG.envio`) y los tiempos reales de la transportadora.
+4b. Dropshipping: abrir una cuenta en la plataforma elegida, escoger 3 a 5 accesorios, poner `precio` y foto (`assets/img/p-<id>.webp`) y quitar `estado:'proximamente'`.
 5. Crear las redes y pegar sus URL en `CONFIG.redes`. Publicar los primeros videos y pegar sus URL en `VIDEOS`.
 6. Revisar la política de distribuidores de Gano Excel: ¿se puede vender en Mercado Libre o redes? ¿hay precio mínimo?
 7. Analítica: Google Analytics 4 o Plausible, y el píxel de Meta (requiere aviso de cookies).
@@ -104,3 +111,15 @@ Tarea de hoy: <...>
 8. Probado con `tools/test_site.js`: carga sin errores, 18 productos con foto, filtros, búsqueda, orden, carrito y subtotal, persistencia, mensaje de WhatsApp, temas, quiz, formularios, política de datos, sin scroll horizontal a 375 px en los 4 temas, botones de 40 px o más.
 9. Falta: número de WhatsApp real, dominio y hosting, permisos de fotos, verificar INVIMA, redes, videos, analítica.
 10. Próximo paso sugerido: publicar en GitHub Pages con un dominio .com o .co y crear Instagram, TikTok y WhatsApp Business.
+
+### Sesión 2 · 2026-11-05 · v0.2 (ciencia + dropshipping)
+1. Se integró la evidencia verificada (10 tarjetas, quiz de 6 mitos y realidades, 4 avisos de seguridad) entre los marcadores `/* <CIENCIA> */`.
+2. Se comprobaron las 11 citas de PubMed vía E-utilities: todas existen y coinciden en tema y año.
+3. Modelo de producto listo para dropshipping: `PROVEEDORES` (`gano` = GX, `drop` = DS), `sku` automático y `estado:'proximamente'`.
+4. El mensaje de pedido por WhatsApp incluye el SKU de cada línea, para saber a qué proveedor comprarle.
+5. Nueva categoría "Accesorios" con 3 productos "Próximamente" (prensa francesa, termo, taza) y botón "Avísame".
+6. Los chips solo muestran categorías con productos; el orden por precio deja al final los "Por confirmar"; el JSON-LD solo incluye productos vendibles.
+7. Los productos sin foto muestran el ícono de taza.
+8. Corrección: la ficha de producto se veía mal en escritorio (las columnas usan ahora `minmax(0,…)`).
+9. Se agregó a `GUIA-NEGOCIO.md` la sección "2b. Dropshipping en Colombia".
+10. Pruebas: `node tools/test_site.js` pasa completo (21 productos, filtro de accesorios, Avísame con SKU, evidencia, quiz y todo lo de v0.1).

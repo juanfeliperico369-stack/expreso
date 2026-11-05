@@ -150,6 +150,9 @@ ul.dot li::marker{color:var(--accent)}
 .card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
 .card-img{border:0;padding:1rem;background:var(--imgbg);cursor:pointer;display:grid;place-items:center;aspect-ratio:4/3;position:relative}
 .card-img img{max-height:100%;width:auto;object-fit:contain;filter:drop-shadow(0 8px 12px rgba(0,0,0,.18))}
+.ph-ico{width:46%;height:auto;aspect-ratio:1;color:var(--brand);opacity:.55}
+.card.soon .precio{border-style:dashed}
+.card-tag.soon{background:var(--accent)}
 .card-tag{position:absolute;left:.7rem;top:.7rem;background:var(--teal);color:#fff;font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.3em .65em;border-radius:6px}
 [data-theme=cafe] .card-tag,[data-theme=bosque] .card-tag,[data-theme=contraste] .card-tag{color:var(--onBrand)}
 .card-b{display:flex;flex-direction:column;flex:1;padding:1rem 1.1rem 1.1rem}
@@ -553,12 +556,22 @@ const CONFIG = {
   contactoDatos: 'WhatsApp de Expreso'  // canal para ejercer derechos de habeas data
 };
 
+/* ---------- PROVEEDORES (uso interno: el prefijo del SKU aparece en el pedido de WhatsApp)
+   gano = reventa Gano Excel (compras al amigo/distribuidor y despachas o él despacha)
+   drop = dropshipping (Dropi u otra plataforma: el proveedor despacha a nombre de Expreso) ---------- */
+const PROVEEDORES = {
+  gano: { sku:'GX', nombre:'Gano Excel · reventa' },
+  drop: { sku:'DS', nombre:'Dropshipping (Dropi u otro)' }
+};
+
 /* ---------- CATEGORÍAS ---------- */
-const CATS = { bebidas: 'Bebidas', suplementos: 'Suplementos', cuidado: 'Cuidado personal' };
+const CATS = { bebidas: 'Bebidas', suplementos: 'Suplementos', cuidado: 'Cuidado personal', accesorios: 'Accesorios' };
 
 /* ---------- PRODUCTOS ----------
    id: único, sin espacios (la foto es assets/img/p-<id>.webp)
-   precio: COP sugerido de catálogo. invima: código según material del distribuidor (VERIFICAR en INVIMA).
+   precio: COP sugerido de catálogo (null = "por confirmar"). invima: código según material del distribuidor (VERIFICAR en INVIMA).
+   proveedor: 'gano' (por defecto) o 'drop'. sku: opcional; si falta se arma como <prefijo>-<ID>.
+   estado: 'proximamente' = se muestra con botón "Avísame" y no entra al carrito (útil para probar demanda antes de tener proveedor).
    Para agregar productos nuevos (otras marcas o nichos), copia un objeto y cambia los datos. */
 const PRODUCTOS = [
   { id:'tinto', cat:'bebidas', nombre:'Tinto Clásico', linea:'GanoCafé Classic · café negro', precio:147900, tag:'Sin azúcar',
@@ -632,14 +645,47 @@ const PRODUCTOS = [
   { id:'exfoliante', cat:'cuidado', nombre:'Exfoliante Piel&Brillo', linea:'Exfoliante corporal', precio:96900, tag:'Piel',
     desc:'Exfoliante corporal con extracto de Ganoderma. Remueve células muertas y deja la piel suave.',
     contiene:['Extracto de Ganoderma lucidum'], uso:'1 a 2 veces por semana sobre la piel húmeda, con masaje suave.',
-    nota:'', invima:'NSOC96487-19CO' }
+    nota:'', invima:'NSOC96487-19CO' },
+  /* --- Expansión por dropshipping: sin precio hasta confirmar proveedor --- */
+  { id:'prensa', cat:'accesorios', proveedor:'drop', estado:'proximamente', nombre:'Prensa francesa', linea:'Cafetera de émbolo · vidrio y bambú', precio:null, tag:'Próximamente',
+    desc:'Para preparar café de origen en casa, sin filtros de papel. ¿La quieres? Te avisamos cuando llegue.',
+    contiene:['Jarra de vidrio','Filtro de acero inoxidable'], uso:'Café molido grueso, agua caliente, 4 minutos y presionar.', nota:'', invima:'' },
+  { id:'termo', cat:'accesorios', proveedor:'drop', estado:'proximamente', nombre:'Termo Expreso', linea:'Acero inoxidable · para llevar', precio:null, tag:'Próximamente',
+    desc:'Tu café caliente por horas, para el trabajo o la universidad.',
+    contiene:['Acero inoxidable de doble pared','Tapa hermética'], uso:'Lavar antes del primer uso.', nota:'', invima:'' },
+  { id:'taza', cat:'accesorios', proveedor:'drop', estado:'proximamente', nombre:'Taza doble pared', linea:'Vidrio térmico', precio:null, tag:'Próximamente',
+    desc:'Mantiene la temperatura y no quema los dedos. Ideal para regalar.',
+    contiene:['Vidrio borosilicato de doble pared'], uso:'Apta para bebidas calientes y frías.', nota:'', invima:'' }
 ];
 
 /* ---------- CIENCIA (resumen verificado: ver docs/EVIDENCIA.md) ---------- */
 /* <CIENCIA> */
-const CIENCIA = [];
-const MITOS = [];
-const SEGURIDAD = [];
+const CIENCIA = [
+  { tema:'Cáncer', nivel:'Insuficiente', dice:'Revisión Cochrane de 5 ensayos de baja calidad: no hay pruebas para usarlo como tratamiento ni de que mejore la supervivencia. Junto a quimio o radioterapia hubo señales favorables, pero imprecisas.', fuente:'Cochrane 2016 · Jin et al.', url:'https://pubmed.ncbi.nlm.nih.gov/27045603/' },
+  { tema:'Diabetes y corazón', nivel:'Insuficiente', dice:'En diabetes tipo 2, 1,4–3 g/día durante 12–16 semanas no redujeron HbA1c, colesterol, LDL, presión arterial ni IMC frente a placebo.', fuente:'Cochrane 2015 · Klupp et al.', url:'https://pubmed.ncbi.nlm.nih.gov/25686270/' },
+  { tema:'Salud general', nivel:'Limitada', dice:'17 ensayos (971 personas): cambios pequeños en IMC y frecuencia cardiaca; sin efecto en glucosa, lípidos, presión ni inflamación. Certeza muy baja (GRADE).', fuente:'Food Sci Nutr 2025 · Jafari et al.', url:'https://pubmed.ncbi.nlm.nih.gov/40510787/' },
+  { tema:'Fatiga', nivel:'Limitada', dice:'Un ensayo aleatorizado en 132 personas con neurastenia mostró menos fatiga con un extracto de polisacáridos de Ganoderma que con placebo. Un solo estudio, con dosis altas de extracto.', fuente:'J Med Food 2005 · Tang et al.', url:'https://pubmed.ncbi.nlm.nih.gov/15857210/' },
+  { tema:'Sistema inmune', nivel:'Limitada', dice:'Ensayos con betaglucanos de hongos, incluido el reishi: buena tolerancia y menos síntomas respiratorios reportados, pero resultados inconsistentes en marcadores inmunes.', fuente:'Food Funct 2021 · Vlassopoulou et al.', url:'https://pubmed.ncbi.nlm.nih.gov/33876798/' },
+  { tema:'Cordyceps', nivel:'Limitada', dice:'En atletas, estudios pequeños muestran una leve mejora de la resistencia y del VO2pico. En ciclistas entrenados, otro ensayo no encontró efecto.', fuente:'Front Nutr 2025 · Shu et al.', url:'https://pubmed.ncbi.nlm.nih.gov/41280379/' },
+  { tema:'Colágeno y piel', nivel:'Limitada', dice:'23 ensayos: la mejora en hidratación, elasticidad y arrugas desaparece al analizar solo los estudios de alta calidad o sin financiación de la industria.', fuente:'Am J Med 2025 · Myung y Park', url:'https://pubmed.ncbi.nlm.nih.gov/40324552/' },
+  { tema:'Colágeno y articulaciones', nivel:'Limitada', dice:'11 ensayos en artrosis de rodilla (870 personas): mejoraron el dolor y la función, pero los estudios difieren mucho entre sí. Faltan ensayos grandes e independientes.', fuente:'Clin Exp Rheumatol 2025 · Simental-Mendía et al.', url:'https://pubmed.ncbi.nlm.nih.gov/39212129/' },
+  { tema:'Café', nivel:'Moderada', dice:'Más de 200 metaanálisis: 3–4 tazas al día se asocian a menor mortalidad y menos enfermedad cardiovascular. Son datos observacionales; en embarazo se asocia a bajo peso al nacer.', fuente:'BMJ 2017 · Poole et al.', url:'https://pubmed.ncbi.nlm.nih.gov/29167102/' },
+  { tema:'Cafeína', nivel:'Sólida', dice:'Hasta 400 mg/día de cafeína no generan preocupación de seguridad en adultos sanos. En embarazo y lactancia, máximo 200 mg/día.', fuente:'EFSA 2015', url:'https://doi.org/10.2903/j.efsa.2015.4102' }
+];
+const MITOS = [
+  { frase:'El Ganoderma cura el cáncer', es:'Mito', porque:'La revisión Cochrane no encontró evidencia para usarlo como tratamiento ni datos de supervivencia. Nunca reemplaza la quimioterapia, la radioterapia ni la cirugía.', url:'https://pubmed.ncbi.nlm.nih.gov/27045603/' },
+  { frase:'El reishi baja el azúcar en personas con diabetes', es:'Mito', porque:'En ensayos controlados con placebo no redujo la HbA1c ni la glucosa en ayunas. No sustituye los medicamentos para la diabetes.', url:'https://pubmed.ncbi.nlm.nih.gov/25686270/' },
+  { frase:'Lo natural no tiene efectos secundarios', es:'Mito', porque:'Hay casos documentados de hepatitis asociados al reishi en polvo, aunque son raros. Natural no significa inofensivo.', url:'https://pubmed.ncbi.nlm.nih.gov/17621752/' },
+  { frase:'El reishi puede alterar exámenes de laboratorio', es:'Realidad', porque:'El polvo de esporas elevó el marcador CA72-4 en algunos pacientes, que volvió a lo normal al suspenderlo. Avisa a tu médico si lo tomas.', url:'https://pubmed.ncbi.nlm.nih.gov/24282100/' },
+  { frase:'3 a 4 tazas de café al día pueden ser parte de una dieta saludable', es:'Realidad', porque:'Ese consumo se asocia a menor mortalidad en estudios observacionales, aunque no prueban causa. Las excepciones son el embarazo y las mujeres con riesgo de fractura.', url:'https://pubmed.ncbi.nlm.nih.gov/29167102/' },
+  { frase:'En el embarazo hay que limitar la cafeína', es:'Realidad', porque:'La EFSA fija un máximo de 200 mg/día en embarazo y lactancia. Un consumo alto de café en el embarazo se asocia a bajo peso al nacer.', url:'https://doi.org/10.2903/j.efsa.2015.4102' }
+];
+const SEGURIDAD = [
+  'El reishi suele tolerarse bien, pero hay casos raros de hepatitis tras 1–2 meses de tomarlo en polvo. Si notas piel u ojos amarillos, orina oscura o dolor abdominal, suspéndelo y consulta.',
+  'Precaución si tomas anticoagulantes o antiagregantes, antidiabéticos, antihipertensivos, inmunosupresores o quimioterapia. Avisa a tu médico antes de una cirugía.',
+  'Embarazo y lactancia: no hay datos en humanos sobre el reishi; lo prudente es evitarlo. La cafeína no debe pasar de 200 mg/día.',
+  'Puede alterar algunos exámenes de laboratorio (como el marcador CA72-4). Cuéntale a tu médico si lo tomas.'
+];
 /* </CIENCIA> */
 
 /* ---------- EXPRESO TV: pega la URL del video cuando lo publiques ---------- */
@@ -673,7 +719,12 @@ const store = {
   get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* modo privado */ } }
 };
+PRODUCTOS.forEach(p => { p.proveedor = PROVEEDORES[p.proveedor] ? p.proveedor : 'gano'; if (!p.sku) p.sku = PROVEEDORES[p.proveedor].sku + '-' + p.id.toUpperCase(); });
 const BYID = Object.fromEntries(PRODUCTOS.map(p => [p.id, p]));
+const vendible = p => p && p.estado !== 'proximamente' && typeof p.precio === 'number';
+const precioTxt = p => typeof p.precio === 'number' ? money(p.precio) : 'Por confirmar';
+const avisame = p => waURL('Hola Expreso, avísenme cuando llegue: ' + p.nombre + ' [' + p.sku + '].');
+const foto = (p, cls = '') => IM['p-' + p.id] ? `<img src="${IM['p-' + p.id]}" alt="${esc(p.nombre)}" width="220" height="220"${cls}>` : `<svg class="ico ph-ico" role="img" aria-label="${esc(p.nombre)}"><use href="#i-cup"/></svg>`;
 const BLANK = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
 let IM = {};
 const img = k => IM[k] || BLANK;
@@ -710,7 +761,7 @@ function cicloTema() {
 /* ---------- catálogo ---------- */
 const F = { cat:'todos', q:'', orden:'rel' };
 function renderChips() {
-  const opts = [['todos','Todos'], ...Object.entries(CATS)];
+  const opts = [['todos','Todos'], ...Object.entries(CATS).filter(([k]) => PRODUCTOS.some(p => p.cat === k))];
   $('#chips').innerHTML = opts.map(([k, v]) =>
     `<button class="chip" type="button" data-chip="${k}" aria-pressed="${F.cat === k}">${esc(v)}</button>`).join('');
   $$('#catBan .cban').forEach(b => b.setAttribute('aria-pressed', String(F.cat === b.dataset.cat)));
@@ -719,8 +770,9 @@ function filtrados() {
   const q = norm(F.q.trim());
   let r = PRODUCTOS.filter(p => (F.cat === 'todos' || p.cat === F.cat) &&
     (!q || norm([p.nombre, p.linea, p.desc, p.tag, CATS[p.cat], ...(p.contiene || [])].join(' ')).includes(q)));
-  if (F.orden === 'asc') r = [...r].sort((a, b) => a.precio - b.precio);
-  else if (F.orden === 'desc') r = [...r].sort((a, b) => b.precio - a.precio);
+  const pv = (p, d) => typeof p.precio === 'number' ? p.precio : d;
+  if (F.orden === 'asc') r = [...r].sort((a, b) => pv(a, Infinity) - pv(b, Infinity));
+  else if (F.orden === 'desc') r = [...r].sort((a, b) => pv(b, -1) - pv(a, -1));
   else if (F.orden === 'az') r = [...r].sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
   return r;
 }
@@ -728,10 +780,10 @@ function renderGrid() {
   const r = filtrados();
   $('#resN').textContent = r.length + ' productos';
   $('#grid').innerHTML = r.length ? r.map(p => `
-    <article class="card">
+    <article class="card${vendible(p) ? '' : ' soon'}">
       <button class="card-img" type="button" data-open="${p.id}" aria-label="Ver detalles de ${esc(p.nombre)}">
-        ${p.tag ? `<span class="card-tag">${esc(p.tag)}</span>` : ''}
-        <img src="${img('p-' + p.id)}" alt="${esc(p.nombre)}" width="220" height="220">
+        ${p.tag ? `<span class="card-tag${vendible(p) ? '' : ' soon'}">${esc(p.tag)}</span>` : ''}
+        ${foto(p)}
       </button>
       <div class="card-b">
         <p class="card-c">${esc(CATS[p.cat])}</p>
@@ -739,8 +791,9 @@ function renderGrid() {
         <p class="card-l">${esc(p.linea)}</p>
         <p class="card-d">${esc(p.desc)}</p>
         <div class="card-f">
-          <span class="precio"><small>Precio sugerido</small><b>${money(p.precio)}</b></span>
-          <button class="btn btn-a btn-s" type="button" data-add="${p.id}" aria-label="Agregar ${esc(p.nombre)} al pedido">Agregar</button>
+          <span class="precio"><small>Precio sugerido</small><b>${precioTxt(p)}</b></span>
+          ${vendible(p) ? `<button class="btn btn-a btn-s" type="button" data-add="${p.id}" aria-label="Agregar ${esc(p.nombre)} al pedido">Agregar</button>`
+            : `<a class="btn btn-s" href="${esc(avisame(p))}" target="_blank" rel="noopener" aria-label="Avísame cuando llegue ${esc(p.nombre)}">Avísame</a>`}
         </div>
       </div>
     </article>`).join('')
@@ -752,7 +805,7 @@ let fichaQ = 1;
 function abrirFicha(id) {
   const p = BYID[id]; if (!p) return; fichaQ = 1;
   $('#fichaBody').innerHTML = `
-    <div class="mimg"><img src="${img('p-' + p.id)}" alt="${esc(p.nombre)}"></div>
+    <div class="mimg">${foto(p)}</div>
     <div>
       <p class="card-c">${esc(CATS[p.cat])}</p>
       <h2 id="fT">${esc(p.nombre)}</h2>
@@ -761,13 +814,14 @@ function abrirFicha(id) {
       <h3>Contiene</h3><ul class="dot">${(p.contiene || []).map(c => `<li>${esc(c)}</li>`).join('')}</ul>
       <h3>Cómo se usa</h3><p>${esc(p.uso)}</p>
       ${p.nota ? `<div class="note">${esc(p.nota)}</div>` : ''}
-      <span class="precio"><small>Precio sugerido</small><b>${money(p.precio)}</b></span>
-      <div class="mrow">
+      <span class="precio"><small>Precio sugerido</small><b>${precioTxt(p)}</b></span>
+      <div class="mrow">${vendible(p) ? `
         <span class="qty"><button type="button" data-fq="-1" aria-label="Menos">−</button><output id="fq">1</output><button type="button" data-fq="1" aria-label="Más">+</button></span>
-        <button class="btn btn-a" type="button" data-addf="${p.id}">Agregar al pedido</button>
+        <button class="btn btn-a" type="button" data-addf="${p.id}">Agregar al pedido</button>`
+        : `<a class="btn btn-a" href="${esc(avisame(p))}" target="_blank" rel="noopener">Avísame cuando llegue</a>`}
       </div>
       <p><a class="btn btn-s" style="margin-top:.8rem" href="${esc(waURL('Hola Expreso, tengo una pregunta sobre ' + p.nombre + '.'))}" target="_blank" rel="noopener"><svg class="ico"><use href="#i-wa"/></svg> Preguntar</a></p>
-      <p class="inv">${p.invima ? 'Registro / notificación sanitaria INVIMA: ' + esc(p.invima) + '. ' : ''}${p.cat === 'cuidado' ? 'Producto cosmético.' : 'Suplemento dietario / alimento. No es un medicamento.'}</p>
+      <p class="inv">Ref. ${esc(p.sku)}. ${p.invima ? 'Registro / notificación sanitaria INVIMA: ' + esc(p.invima) + '. ' : ''}${{ cuidado:'Producto cosmético.', accesorios:'' }[p.cat] ?? 'Suplemento dietario / alimento. No es un medicamento.'}</p>
     </div>`;
   $('#ficha').showModal();
 }
@@ -778,7 +832,7 @@ if (!cart || typeof cart !== 'object' || Array.isArray(cart)) cart = {};
 function cleanCart() {
   for (const id in cart) {
     const q = Math.floor(Number(cart[id]));
-    if (!BYID[id] || !(q > 0)) delete cart[id]; else cart[id] = Math.min(99, q);
+    if (!vendible(BYID[id]) || !(q > 0)) delete cart[id]; else cart[id] = Math.min(99, q);
   }
 }
 function totals() {
@@ -789,12 +843,12 @@ function totals() {
   return { n, sub, env, total: sub + (env || 0) };
 }
 function setQty(id, q) {
-  if (!BYID[id]) return;
+  if (!vendible(BYID[id])) return;
   if (q <= 0) delete cart[id]; else cart[id] = Math.min(99, q);
   cleanCart(); store.set('expreso.cart', cart); renderCart();
 }
 function addToCart(id, q = 1) {
-  if (!BYID[id]) return;
+  if (!vendible(BYID[id])) return;
   setQty(id, (cart[id] || 0) + q);
   toast('Agregado: ' + BYID[id].nombre + (q > 1 ? ' × ' + q : ''));
 }
@@ -805,7 +859,7 @@ function renderCart() {
   const ids = Object.keys(cart);
   $('#cartList').innerHTML = ids.length ? ids.map(id => { const p = BYID[id]; return `
     <div class="ci">
-      <img src="${img('p-' + id)}" alt="">
+      ${foto(p).replace(/alt="[^"]*"/, 'alt=""')}
       <div><b>${esc(p.nombre)}</b><small>${money(p.precio)} c/u</small></div>
       <span class="qty"><button type="button" data-q="${id}" data-d="-1" aria-label="Quitar uno de ${esc(p.nombre)}">−</button><output>${cart[id]}</output><button type="button" data-q="${id}" data-d="1" aria-label="Agregar uno de ${esc(p.nombre)}">+</button></span>
     </div>`; }).join('')
@@ -820,7 +874,7 @@ function renderCart() {
 function mensajePedido(data) {
   const t = totals();
   const L = ['Hola Expreso 👋 Quiero hacer este pedido:', ''];
-  for (const id in cart) L.push(`• ${cart[id]} × ${BYID[id].nombre} — ${money(cart[id] * BYID[id].precio)}`);
+  for (const id in cart) L.push(`• ${cart[id]} × ${BYID[id].nombre} [${BYID[id].sku}] — ${money(cart[id] * BYID[id].precio)}`);
   L.push('', 'Subtotal: ' + money(t.sub));
   L.push('Envío: ' + (t.env == null ? 'por confirmar según ciudad' : (t.env === 0 ? 'gratis' : money(t.env))));
   L.push('Total: ' + money(t.total) + (t.env == null ? ' + envío' : ''), '');
@@ -898,8 +952,8 @@ function abrirLegal(k) { $('#legalBody').innerHTML = LEGAL[k] || ''; $('#legal')
 
 function jsonLD() {
   const s = document.createElement('script'); s.type = 'application/ld+json';
-  s.textContent = JSON.stringify({ '@context':'https://schema.org', '@type':'ItemList', itemListElement: PRODUCTOS.map((p, i) => ({
-    '@type':'ListItem', position:i + 1, item:{ '@type':'Product', name:p.nombre, description:p.desc, category:CATS[p.cat],
+  s.textContent = JSON.stringify({ '@context':'https://schema.org', '@type':'ItemList', itemListElement: PRODUCTOS.filter(vendible).map((p, i) => ({
+    '@type':'ListItem', position:i + 1, item:{ '@type':'Product', name:p.nombre, sku:p.sku, description:p.desc, category:CATS[p.cat],
       offers:{ '@type':'Offer', price:p.precio, priceCurrency:'COP', availability:'https://schema.org/InStock' } } })) });
   document.head.appendChild(s);
 }
@@ -966,7 +1020,7 @@ function init() {
   if (cli && typeof cli === 'object') { const f = $('#pedido'); f.nombre.value = cli.nombre || ''; f.ciudad.value = cli.ciudad || ''; }
   $('#waFloat').href = waURL('Hola Expreso, quiero más información.');
   $('#oppBtn').href = waURL('Hola Expreso, quiero conocer la oportunidad de negocio con Gano Excel.');
-  $('#statN').textContent = PRODUCTOS.length;
+  $('#statN').textContent = PRODUCTOS.filter(vendible).length;
   $('#yr').textContent = new Date().getFullYear();
   renderChips(); renderGrid(); renderCart(); renderCiencia(); renderQuiz(); renderTV(); renderFAQ(); renderRedes(); jsonLD();
   bind(); reveal();
