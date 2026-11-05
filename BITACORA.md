@@ -76,7 +76,7 @@
 
 1. ⚠️ Poner el número real de WhatsApp en `CONFIG.whatsapp`.
 2. ⚠️ Confirmar el permiso de las fotos y los códigos INVIMA.
-3. Comprar un dominio y publicar (GitHub Pages, Netlify o Cloudflare Pages son gratis). Luego activar `canonical` y `og:image` (están comentados en el `<head>`).
+3. Comprar un dominio y publicar en **Cloudflare Pages** o Netlify (gratis). **No usar GitHub Pages**: sus condiciones prohíben las tiendas online (ver la guía, sección 5). Luego activar `canonical` y `og:image` (están comentados en el `<head>`).
 4. Definir la tarifa de envío (`CONFIG.envio`) y los tiempos reales de la transportadora.
 4b. Dropshipping: abrir una cuenta en la plataforma elegida, escoger 3 a 5 accesorios, poner `precio` y foto (`assets/img/p-<id>.webp`) y quitar `estado:'proximamente'`.
 5. Crear las redes y pegar sus URL en `CONFIG.redes`. Publicar los primeros videos y pegar sus URL en `VIDEOS`.
@@ -110,7 +110,7 @@ Tarea de hoy: <...>
 7. Investigación con subagentes: `docs/EVIDENCIA.md` (PubMed, Cochrane, ClinicalTrials.gov) y `GUIA-NEGOCIO.md`.
 8. Probado con `tools/test_site.js`: carga sin errores, 18 productos con foto, filtros, búsqueda, orden, carrito y subtotal, persistencia, mensaje de WhatsApp, temas, quiz, formularios, política de datos, sin scroll horizontal a 375 px en los 4 temas, botones de 40 px o más.
 9. Falta: número de WhatsApp real, dominio y hosting, permisos de fotos, verificar INVIMA, redes, videos, analítica.
-10. Próximo paso sugerido: publicar en GitHub Pages con un dominio .com o .co y crear Instagram, TikTok y WhatsApp Business.
+10. Próximo paso sugerido: publicar en Cloudflare Pages con un dominio .com o .co y crear Instagram, TikTok y WhatsApp Business.
 
 ### Sesión 2 · 2026-11-05 · v0.2 (ciencia + dropshipping)
 1. Se integró la evidencia verificada (10 tarjetas, quiz de 6 mitos y realidades, 4 avisos de seguridad) entre los marcadores `/* <CIENCIA> */`.

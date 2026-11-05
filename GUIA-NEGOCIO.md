@@ -45,6 +45,90 @@
 
 ---
 
+## 2b. Dropshipping en Colombia (a fondo)
+
+En Colombia, "dropshipping" casi siempre significa **dropshipping nacional con contraentrega**: un proveedor local guarda el stock, una plataforma conecta tu tienda con él y con las transportadoras, y el cliente paga al recibir.
+
+**Cómo funciona, paso a paso:**
+1. Eliges un producto del catálogo de la plataforma, que muestra el precio del proveedor.
+2. Lo publicas en tu web y redes con tu precio, tus fotos y tus videos.
+3. El cliente pide por WhatsApp o la web. En contraentrega no paga nada por adelantado.
+4. Confirmas el pedido (por WhatsApp o llamada) y lo cargas en la plataforma con la dirección y el SKU.
+5. El proveedor empaca y la plataforma genera la guía con Servientrega, Interrapidísimo, Coordinadora o Envía ([AndreyBusiness](https://www.andreybusiness.com/blog/effi-vs-dropi-cual-es-mejor-dropshipping-2026)).
+6. La transportadora entrega y recauda. La plataforma te liquida en tu billetera: precio − costo del proveedor − flete − comisiones. En Dropi, unas **24 h después de la entrega confirmada** ([DigitalTrendy360, consultado 25-sep-2026](https://digitaltrendy360.com.co/en/que-es-dropi/)).
+7. Si el cliente rechaza el pedido, **pagas el flete de ida y el de vuelta** aunque no haya venta (misma fuente).
+
+**Plataformas activas en 2026** (casi toda la información pública viene de blogs con enlaces de afiliado a Dropi: compara con una cuenta de prueba):
+
+| Plataforma | Costo fijo | Comisión | Notas |
+|---|---|---|---|
+| **Dropi** | Registro gratis, sin mensualidad ([DigitalTrendy360](https://digitaltrendy360.com.co/en/que-es-dropi/)) | 2–3 % o 5 % por pedido entregado, según la fuente ([AndreyBusiness](https://www.andreybusiness.com/blog/comisiones-dropi-cuanto-cobra-por-cada-pedido)) **(estimado, verificar en app.dropi.co)** | La más grande: dice tener más de 50.000 dropshippers ([Stockeado](https://stockeado.co/blog/dropshipping-colombia-guia-completa-2026)) y operar en 12 países ([AndreyBusiness](https://www.andreybusiness.com/dropi)) |
+| **Mastershop** | App de Shopify con instalación gratis; planes "desde US$1/mes" tras la prueba ([AndreyBusiness](https://www.andreybusiness.com/blog/mastershop-vs-rocketfy-comparativa-2026)) **(estimado, verificar)** | Cobra envío, valor del producto y "comisión de plataforma, si aplica", en USD ([Shopify App Store](https://apps.shopify.com/mastershop)) | Algunos proveedores superan el 35 % de devolución ([Stockeado](https://stockeado.co/blog/dropshipping-colombia-guia-completa-2026)) |
+| **Effi** | Sin dato público | Sin dato público **(verificar)** | Colombiana, contraentrega con billetera; opera en CO, MX y PE ([AndreyBusiness](https://www.andreybusiness.com/blog/effi-vs-mastershop-comparativa-2026)). No pude confirmar su relación con Aveonline **(verificar)** |
+| **Rocketfy** | Sin dato público | Sin dato público **(verificar)** | Alternativa que aparece en comparativas ([AndreyBusiness](https://www.andreybusiness.com/blog/rocketfy-vs-effi-comparativa-dropshipping-2026)) |
+
+**Contraentrega: el costo real de las devoluciones**
+- Flete de **$8.000–15.000 por pedido despachado** y **$6.000–12.000 por cada devolución**, a cargo del vendedor ([DigitalTrendy360](https://digitaltrendy360.com.co/en/que-es-dropi/)) **(estimado)**. El recaudo lo cobra la transportadora, no la plataforma: 3–5 % del valor ([AndreyBusiness](https://www.andreybusiness.com/blog/interrapidisimo-contra-entrega-dropshipping-2026)) **(estimado, verificar)**.
+- **Tasa de entrega efectiva**: 75–85 % en operaciones que confirman cada pedido, 55–60 % en las que no ([Stockeado](https://stockeado.co/blog/dropshipping-colombia-guia-completa-2026)); otra fuente da 65–78 % ([AndreyBusiness](https://www.andreybusiness.com/blog/dropshipping-contraentrega-colombia-2026)). Por encima del 30–40 % de devolución no queda margen ([AndreyBusiness](https://www.andreybusiness.com/blog/tasa-devoluciones-dropshipping-contra-entrega-normal-2026)) **(estimado)**.
+- Como referencia, el e-commerce colombiano en general devuelve el **20–21 %** de las compras en 2026, frente al 5–8,9 % de las tiendas físicas ([La República, 30-jun-2026](https://www.larepublica.co/consumo/que-parte-de-las-compras-online-va-de-vuelta-a-la-tienda-4423630)).
+- Confirmar cada pedido por WhatsApp o llamada antes de despachar reduciría las devoluciones un 15–20 % ([Stockeado](https://stockeado.co/blog/dropshipping-colombia-guia-completa-2026)) **(estimado)**.
+
+**Dropshipping internacional (AliExpress, CJ Dropshipping): por qué no sirve para Colombia**
+- **Tiempos**: AliExpress estándar 15–45 días y premium 7–15, en guías generales que no son específicas de Colombia ([Tiendanube](https://www.tiendanube.com/blog/mx/cuanto-tarda-en-llegar-un-pedido-de-aliexpress-a-mexico)) **(estimado)**. A Colombia suele llegar por correo postal con varias escalas ([Las2Orillas](https://www.las2orillas.co/por-que-los-pedidos-de-aliexpress-y-shopee-se-demoran-tanto-en-llegar/)). CJ tarda 6–20 días, sin plazo garantizado ([HustleGotReal](https://hustlegotreal.com/blog/cj-dropshipping-review/)) **(estimado)**.
+- **Sin contraentrega**: el cliente paga primero y espera semanas, lo que trae reclamos, reversiones de pago (art. 51 Ley 1480) y riesgo de bloqueo en la pasarela.
+- **Aduana**: los envíos de hasta **US$200 FOB no pagan arancel** (Decreto 1165 de 2019, art. 261). La exclusión de IVA hasta US$200 solo aplica "según cada TLC" (art. 428 lit. j del Estatuto Tributario). El Decreto 1474 de 2025, que la bajaba a US$50, quedó sin efectos por la suspensión de la Corte del 29-ene-2026 ([DIAN, Oficio 1470 de 10-feb-2026](https://normograma.dian.gov.co/dian/compilacion/docs/oficio_dian_1470_2026.htm)). Los envíos desde países distintos de EE. UU. pagan IVA, y la mercancía con fines comerciales no tiene el beneficio ([El Heraldo](https://www.elheraldo.co/economia/conozca-cuando-debe-pagar-iva-por-envios-menores-de-usd200-866043)) **(verificar)**. Úsalo solo para pedir muestras o para importar stock de manera formal.
+
+**Matemática del margen** (ejemplo: termo de café vía Dropi en contraentrega; supuestos de costo, precio y CPA tomados del ejemplo de [DigitalTrendy360](https://digitaltrendy360.com.co/en/que-es-dropi/); no incluye impuestos ni retenciones):
+
+| Concepto (por pedido **entregado**) | Entrega 75 % | Entrega 60 % |
+|---|---|---|
+| Precio de venta | $89.900 | $89.900 |
+| − Costo del proveedor | $35.000 | $35.000 |
+| − Flete de ida | $10.000 | $10.000 |
+| − Recaudo contraentrega (~3 %, estimado) | $2.700 | $2.700 |
+| − Comisión de plataforma (~3 %, estimado) | $2.700 | $2.700 |
+| − Publicidad por venta (CPA de $20.000 por pedido creado ÷ tasa de entrega) | $26.700 | $33.300 |
+| − Provisión de devoluciones (rechazos por cada entrega × $19.000 de ida y vuelta) | $6.300 | $12.700 |
+| **= Utilidad** | **$6.500 (7 %)** | **−$6.500** |
+
+**La tasa de entrega decide el negocio.** El **ROAS mínimo de equilibrio** (sobre ventas entregadas) es precio ÷ (margen antes de pauta − provisión de devoluciones): 89.900 ÷ 33.200 ≈ **2,7** con 75 % de entrega y ≈ **3,4** con 60 %.
+
+**Cómo elegir productos ganadores:**
+- Margen de al menos **$25.000 por pedido entregado** y proveedor con **devolución menor al 20 %** ([Stockeado](https://stockeado.co/blog/dropshipping-colombia-guia-completa-2026)). Ticket de $60.000 a $150.000, el rango en que suelen operar las tiendas contraentrega ([AndreyBusiness](https://www.andreybusiness.com/colombia/herramientas/lector-metricas-tiktok-ads-colombia)).
+- Que resuelva un problema o se luzca en un video de 15 s; liviano, no frágil y sin tallas; **sin registro INVIMA o con registro vigente demostrado**; que encaje con café, ritual, oficina o bienestar.
+- **Herramientas**: [Biblioteca de anuncios de Meta](https://buffer.com/resources/meta-ad-library/) (gratis, sin cuenta); [TikTok Creative Center, Top Products](https://ads.tiktok.com/help/article/top-products) (gratis; su disponibilidad en 2026 puede haber cambiado); Minea (plan Lite gratis, Starter ~US$49/mes, [AffMaven](https://affmaven.com/minea-pricing/)) **(estimado)**; el ranking del catálogo de Dropi; "Más vendidos" de Mercado Libre; Google Trends.
+
+**Validar con anuncios antes de tener stock (regla práctica):** prueba 3 productos con 3 creativos cada uno, a $20.000–30.000/día por producto durante 3–5 días. Sigue adelante solo si el costo por pedido creado es menor o igual al 40 % del margen antes de pauta y si logras 20 o más pedidos con entrega efectiva de al menos 70 %. Solo entonces compra 20–50 unidades: tendrás mejor costo, despacho más rápido y menos novedades.
+
+**Obligaciones legales (aunque no toques el producto):**
+- **Garantía**: ante el consumidor responden **solidariamente productor y proveedor** ([Ley 1480, art. 10](http://www.secretariasenado.gov.co/senado/basedoc/ley_1480_2011.html)). Si tú vendes, tú respondes. Aplica todo §3.2: identidad, precio total y retracto (art. 50) y reversión del pago (art. 51).
+- **Facturación**: tú le vendes al cliente. Si estás obligado, facturas el precio total, y el proveedor te factura a ti (§3.1).
+- **INVIMA**: suplementos, alimentos y cosméticos exigen registro o notificación sanitaria vigente. Hay alertas frecuentes sobre suplementos sin registro vendidos por internet ([RCN, sep-2026](https://www.noticiasrcn.com/salud-y-bienestar/invima-alerta-por-varios-productos-fraudulentos-1056388)). Para termos y tazas, pide la ficha de cumplimiento de la Res. 683 de 2012, sobre materiales en contacto con alimentos **(verificar)**. La publicidad sigue las reglas de §3.4–3.5.
+
+| Riesgo | Cómo mitigarlo |
+|---|---|
+| El proveedor se queda sin stock con la pauta activa | Verificar el stock a diario, tener un proveedor B y pausar los anuncios cuando queden menos de 20 unidades |
+| Calidad irregular | Comprar una muestra, grabar tu propio unboxing y revisar el historial de devoluciones del proveedor |
+| Saturación (mismo producto y mismo video en 50 tiendas) | Combo propio (termo + café Expreso), creativos originales y marca |
+| Devoluciones y "novedades" de la transportadora | Confirmar por WhatsApp, pedir dirección con barrio y referencia, revisar novedades todos los días |
+| Flujo de caja y cuenta publicitaria | La liquidación llega después de la entrega: reserva una semana de pauta. Cero claims de salud y 2 administradores en el Business Manager |
+
+**Cómo encaja en Expreso:**
+- **Gano Excel = reventa o consignación con tu amigo** (un dropshipping local y manual): él guarda el stock, tú vendes y le pasas el pedido con el SKU, y él despacha con la guía que tú generas. No va por Dropi (es marca de un tercero, está sujeta a la política MLM y al INVIMA). Prefiere el pago anticipado por Bre-B o link; contraentrega solo para clientes con historial.
+- **Expansión = accesorios de café y bienestar vía Dropi** (termos, prensas francesas, molinos manuales, espumadores, tazas). No compiten con Gano, no requieren registro sanitario y sirven para armar combos con el café (§12, nicho 4).
+
+**Flujo operativo con la web:** (1) el carrito manda por WhatsApp el **SKU**, la cantidad, la ciudad y el método de pago (agrega un SKU a cada producto del `index.html`) → (2) confirmas datos y envías el resumen (art. 50) → (3) creas la orden en Dropi (accesorios) o se la pasas a tu amigo (Gano) → (4) se genera la guía y le envías el número al cliente; etiqueta "Despachado" → (5) revisas novedades a diario, avisas el día de la entrega y sigues con la postventa de §11 → (6) registras en la hoja: pedido, SKU, costo, flete, estado y liquidación.
+
+| KPI de dropshipping | Fórmula | Meta |
+|---|---|---|
+| Tasa de entrega efectiva | Entregados ÷ despachados | ≥ 75 % |
+| Tasa de devolución | Devueltos ÷ despachados | ≤ 20 % |
+| ROAS mínimo de equilibrio | Precio ÷ (margen antes de pauta − provisión de devoluciones) | Superar ~2,7 (ejemplo) |
+| Utilidad neta por pedido entregado | Tabla de margen | ≥ $10.000 |
+| Días hasta la entrega | Fecha de entrega − fecha del pedido | ≤ 4 días hábiles |
+
+---
+
 ## 3. Legal mínimo en Colombia
 
 ### 3.1 RUT, DIAN e impuestos
@@ -87,6 +171,7 @@
 |---|---|---|---|---|
 | **Web propia** (la actual) + WhatsApp + links de pago | ~$0 de hosting + dominio | Solo la pasarela (§6) | Control total, sin competir con otros vendedores en la misma página | ★★★★★ |
 | **Mercado Libre CO** | $0 | **8–19 %** (o 11–22 % con cuotas) según categoría; envío gratis obligatorio desde **$60.000**, con descuento de hasta 50 % según reputación ([DigitalTrendy360, consultado 9-oct-2026](https://digitaltrendy360.com.co/en/vender-en-mercado-libre/)) | Promo para cuentas empresa nuevas: 3 meses sin comisión (mismo artículo). El INVIMA ya ha actuado sobre publicaciones de suplementos en ML ([INVIMA](https://www.invima.gov.co/biblioteca/proceso-201605960-notificacion-por-aviso-2019001534-05-11-2019-fecha-de-publicacion-06-11-2019pdf-1)) | ★★ (solo si Gano lo permite) |
+| **Dropi / Mastershop / Effi** (dropshipping nacional, ver §2b) | Registro gratis | Plataforma 0–5 % **(estimado)** + flete de $8.000–15.000 + devoluciones | Contraentrega con 55–85 % de entrega efectiva según la operación ([Stockeado](https://stockeado.co/blog/dropshipping-colombia-guia-completa-2026)) | ★★★ (solo accesorios, nunca Gano) |
 | **Shopify** | Basic **US$39/mes** (US$29 en pago anual), Grow US$105, Advanced US$399 ([WebsiteBuilderExpert](https://www.websitebuilderexpert.com/ecommerce-website-builders/shopify-pricing/)) | +2 % (Basic) por usar pasarela externa; **Shopify Payments no opera en Colombia** ([ConsultorSEO](https://consultorseo.info/blog/shopify-vs-mercadolibre-colombia/)) | Apps de Wompi, Mercado Pago y ePayco | ★★★ (fase escalado) |
 | **Tiendanube** | **$24.900 / $49.900 / $149.900 COP/mes** ([Tiendanube](https://www.tiendanube.com/blog/precio-tiendanube/)) | +2 % / 1 % / 0,7 % según plan, aparte de la pasarela ([ayuda Tiendanube](https://ayuda.tiendanube.com/es_AR/123484-costos-por-transaccion/como-se-calculan-los-costos-por-transaccion)) | Precios en pesos y soporte local | ★★★★ (alternativa barata a Shopify) |
 | **WooCommerce** | Plugin gratis + hosting (~US$3–4/mes en promoción y ~US$11–12 al renovar, [Findstack](https://findstack.com/resources/hostinger-renewal-price)) **(estimado, verificar)** | Solo la pasarela | Hay que mantener WordPress, plugins y seguridad | ★★ |
@@ -346,8 +431,8 @@ Puntaje de 1 a 5. Todo producto ingerible requiere **registro sanitario INVIMA**
 | 8 | Leer datos: apagar el peor creativo y duplicar el mejor · flujo de postventa (día 3, 10, 25) | CAC v1 |
 | 9 | Combos para subir el ticket · programa de referidos · encuesta a clientes | Ticket medio ≥ $180.000 |
 | 10 | Retargeting (campaña C) · 1 video largo en YouTube · cotizar el café de origen (nicho 1) | ROAS v1 |
-| 11 | Revisión legal de todo el contenido publicado · decidir Tiendanube o Shopify según volumen | Decisión de plataforma |
-| 12 | Evaluar KPIs (§11): si la recompra es ≥ 30 % y el LTV/CAC ≥ 3, subir la pauta un 20 % por semana | Informe de 90 días |
+| 11 | Revisión legal de todo el contenido publicado · decidir Tiendanube o Shopify según volumen · abrir cuenta en Dropi y elegir 3 accesorios con los criterios de §2b | Decisión de plataforma |
+| 12 | Evaluar KPIs (§11): si la recompra es ≥ 30 % y el LTV/CAC ≥ 3, subir la pauta un 20 % por semana · test de los 3 accesorios ($20.000–30.000/día cada uno, 3–5 días; medir la tasa de entrega efectiva, §2b) | Informe de 90 días + accesorio ganador o descarte |
 | 13 | Con 2 o más meses de clientes recurrentes y la política de Gano clara, inscribirte como vendedor independiente; preparar el material honesto de la oportunidad | Plan del trimestre 2 |
 
 ---
@@ -364,4 +449,5 @@ Puntaje de 1 a 5. Todo producto ingerible requiere **registro sanitario INVIMA**
 - **Pagos y envíos**: [Wompi (Enter.co)](https://www.enter.co/fintech/wompi-baja-la-tarifa-del-qr-al-1-y-amplia-los-pagos-desde-el-celular/) · [Mercado Pago](https://www.mercadopago.com.co/herramientas-para-vender/link-de-pago) · [ePayco](https://epayco.com/tarifas/) · [GuíaDeSoftware](https://www.guiadesoftware.com/blog/mejor-pasarela-pago-colombia) · [PayU (Tiendanube)](https://www.tiendanube.com/blog/como-cobrar-online-con-payu/) · [Bre-B (La República)](https://www.larepublica.co/finanzas/llaves-para-negocios-de-bre-b-4241983) · [Bre-B (Actualícese)](https://actualicese.com/bre-b-ya-esta-operando-oficialmente-y-van-mas-de-82-millones-de-llaves-registradas/) · [Colombia Move: transportadoras](https://colombiamove.com/blog/es/domestic-couriers-colombia-servientrega-interrapidisimo-shipping/) · [AndreyBusiness: comparativa](https://www.andreybusiness.com/blog/servientrega-vs-coordinadora-vs-interrapidisimo-2026) · [AndreyBusiness: contraentrega](https://www.andreybusiness.com/blog/interrapidisimo-contra-entrega-dropshipping-2026) · [Mipaquete](https://apps.shopify.com/logistica-envios-ecommerce)
 - **Publicidad y mercado**: [Superads CPM](https://www.superads.ai/facebook-ads-costs/cpm-cost-per-mille/colombia) · [Superads CPC](https://www.superads.ai/facebook-ads-costs/cpc-cost-per-click/colombia) · [Superads salud](https://www.superads.ai/facebook-ads-costs/cpc-cost-per-click/healthcare/colombia) · [Cangrejo Digital](https://cangrejodigital.com/meta-ads/cuanto-invertir-facebook-ads/) · [Stackmatix: TikTok](https://stackmatix.com/blog/tiktok-ads-cost-by-country-2026) · [NovoAds](https://novoads.ai/es/blog/cpc-promedio-por-industria-latam) · [Google: CPV](https://support.google.com/google-ads/answer/2472735?hl=en) · [MegaDigital](https://megadigital.ai/en/blog/youtube-ads-cost) · [CCCE cierre 2025](https://ccce.org.co/wp-content/uploads/2017/06/V2-1-PUBLICO-INFORME-DE-CIERRE-2025.pdf) · [J. Pinzón (conversión)](https://co.linkedin.com/in/pinzonjavier)
 - **Creadores e IA**: [YPP: requisitos](https://support.google.com/youtube/answer/72851?hl=es-419) · [YPP: disponibilidad](https://support.google.com/youtube/answer/7101720?hl=es-419) · [Blog YouTube 2012](https://youtube-espanol.googleblog.com/2012/06/creciendo-el-programa-de-socios-mas.html) · [YouTube: contenido no auténtico](https://support.google.com/youtube/answer/1311392?hl=es-419) · [YouTube: divulgación IA](https://support.google.com/youtube/answer/14328491?hl=es-419) · [TikTok: IA](https://www.tiktok.com/support/faq_detail?id=7636670084747893268) · [IMH: etiquetas IA](https://influencermarketinghub.com/ai-disclosure-rules/) · [TimeToPost](https://timetopost.co/blog/tiktok-creator-rewards-requirements-2026/) · [TTCalculator](https://ttcalculator.net/data/reference/creator-fund-countries/) · [ShortSync: Facebook](https://www.shortsync.app/resources/facebook-content-monetization-program-2026) · [Metricool](https://metricool.com/es/como-monetizar-facebook/) · [Krater: Veo](https://krater.ai/pricing/veo) · [CostBench: ElevenLabs](https://costbench.com/changelog/elevenlabs-price-increase-2026-04/) · [Smallest: ElevenLabs](https://smallest.ai/blog/elevenlabs-pricing-plans-cost-what-you-get-in-2026) · [FluxNote: HeyGen](https://fluxnote.io/guides/heygen-pricing-guide-2026) · [CostBench: Runway](https://costbench.com/compare/google-veo-vs-runway/) · [CapCut](https://videoaitoolsreviews.pages.dev/pages/pricing-compared.html)
+- **Dropshipping**: [DigitalTrendy360: Dropi](https://digitaltrendy360.com.co/en/que-es-dropi/) · [AndreyBusiness: comisiones Dropi](https://www.andreybusiness.com/blog/comisiones-dropi-cuanto-cobra-por-cada-pedido) · [AndreyBusiness: Dropi](https://www.andreybusiness.com/dropi) · [Stockeado](https://stockeado.co/blog/dropshipping-colombia-guia-completa-2026) · [Mastershop (Shopify)](https://apps.shopify.com/mastershop) · [Mastershop vs Rocketfy](https://www.andreybusiness.com/blog/mastershop-vs-rocketfy-comparativa-2026) · [Effi vs Mastershop](https://www.andreybusiness.com/blog/effi-vs-mastershop-comparativa-2026) · [Rocketfy vs Effi](https://www.andreybusiness.com/blog/rocketfy-vs-effi-comparativa-dropshipping-2026) · [Effi vs Dropi](https://www.andreybusiness.com/blog/effi-vs-dropi-cual-es-mejor-dropshipping-2026) · [Contraentrega 2026](https://www.andreybusiness.com/blog/dropshipping-contraentrega-colombia-2026) · [Tasa de devoluciones](https://www.andreybusiness.com/blog/tasa-devoluciones-dropshipping-contra-entrega-normal-2026) · [Lector TikTok Ads CO](https://www.andreybusiness.com/colombia/herramientas/lector-metricas-tiktok-ads-colombia) · [La República: devoluciones](https://www.larepublica.co/consumo/que-parte-de-las-compras-online-va-de-vuelta-a-la-tienda-4423630) · [Tiendanube: AliExpress](https://www.tiendanube.com/blog/mx/cuanto-tarda-en-llegar-un-pedido-de-aliexpress-a-mexico) · [Las2Orillas](https://www.las2orillas.co/por-que-los-pedidos-de-aliexpress-y-shopee-se-demoran-tanto-en-llegar/) · [HustleGotReal: CJ](https://hustlegotreal.com/blog/cj-dropshipping-review/) · [DIAN Oficio 1470/2026](https://normograma.dian.gov.co/dian/compilacion/docs/oficio_dian_1470_2026.htm) · [El Heraldo: IVA US$200](https://www.elheraldo.co/economia/conozca-cuando-debe-pagar-iva-por-envios-menores-de-usd200-866043) · [AffMaven: Minea](https://affmaven.com/minea-pricing/) · [TikTok Top Products](https://ads.tiktok.com/help/article/top-products) · [Buffer: Meta Ad Library](https://buffer.com/resources/meta-ad-library/) · [RCN: INVIMA](https://www.noticiasrcn.com/salud-y-bienestar/invima-alerta-por-varios-productos-fraudulentos-1056388)
 - **Nichos**: [U. Rosario: melena de león](https://repository.urosario.edu.co/items/8bf36b0d-18d0-4566-9dba-7d9ca87cd360/full) · [VitalSetas (Portafolio)](https://www.portafolio.co/negocios/empresas/vitalsetas-la-empresa-que-le-apuesta-al-mercado-saludable-con-los-hongos-580633) · [Valora Analitik: café](https://www.valoraanalitik.com/criterio-de-consumo-de-cafe-cambio-en-colombia/) · [Safras/USDA](https://safras.com.br/es/produccion-de-cafe-en-colombia-debe-totalizar-125-mi-de-sacos-en-2025-26-usda/) · [Portafolio: suscripciones](https://www.portafolio.co/negocios/empresas/el-cafe-apuesta-por-las-suscripciones-para-fidelizar-clientes-y-cambiar-los-habitos-de-consumo-499230)
