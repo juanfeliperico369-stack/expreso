@@ -50,7 +50,7 @@
 
 ## 4. Cómo editar (todo está al inicio del `<script>` en `index.html`)
 
-1. **`CONFIG`**: número de WhatsApp (**hoy es el placeholder `573000000000`: REEMPLAZAR**), costo de envío (`null` = "se confirma según ciudad"), envío gratis desde, tiempo de envío, métodos de pago y URL de redes.
+1. **`CONFIG`**: número de WhatsApp (**hoy está vacío: REEMPLAZAR**, ej. `573001234567`), costo de envío (`null` = "se confirma según ciudad"), envío gratis desde, tiempo de envío, métodos de pago y URL de redes.
 2. **`PRODUCTOS`**: un objeto por producto (`id, cat, nombre, linea, precio, tag, desc, contiene[], uso, nota, invima`, y opcionalmente `proveedor`, `sku`, `estado`).
    - `proveedor`: `'gano'` (reventa Gano Excel, el valor por defecto) o `'drop'` (dropshipping). Están definidos en **`PROVEEDORES`**.
    - `sku`: si no lo pones, se arma solo (`GX-TINTO`, `DS-PRENSA`). **El SKU sale en el mensaje de WhatsApp** del pedido: así sabes a quién comprarle cada producto.
@@ -86,7 +86,7 @@
 
 ## 6. Pendientes (por prioridad)
 
-1. ⚠️ Poner el número real de WhatsApp en `CONFIG.whatsapp`.
+1. ⚠️ Poner el número real de WhatsApp en `CONFIG.whatsapp` (hoy está vacío: el cliente elige el chat y ve un aviso de vista previa).
 2. ⚠️ Confirmar el permiso de las fotos y los códigos INVIMA.
 3. Publicar (15 min): comprar un dominio → Cloudflare Pages → "Create project" → conectar este repo de GitHub (rama principal, sin comando de build, carpeta raíz `/`) → agregar el dominio personalizado → correr `python3 tools/set_domain.py https://tu-dominio.com`, hacer commit y push. **No usar GitHub Pages** (sus términos prohíben tiendas online).
 4. Definir la tarifa de envío (`CONFIG.envio`) y los tiempos reales de la transportadora.
@@ -160,3 +160,13 @@ Tarea de hoy: <...>
 8. `node tools/test_site.js`: todas las pruebas pasan.
 9. Falta: publicar con el dominio real y correr `set_domain.py`.
 10. Siguiente: más artículos de la revista (uno por cada video publicado) y combos cuando estén los márgenes.
+
+### Sesión 5 · 2026-11-05 · v0.5 (vista previa en línea + robustez)
+1. Vista previa privada publicada en claude.ai: https://claude.ai/artifact/JYHQQ42px3Xf7MaPqSx55i. Es una copia de `index.html` sin la envoltura `<html>`, `<head>` ni `<body>` y con el título "Tienda Expreso". Para actualizarla, se vuelve a publicar desde la sesión de Claude.
+2. `CONFIG.whatsapp` vacío por defecto: así ningún pedido llega a un número ajeno. Sin número, WhatsApp le deja al cliente elegir el chat y aparece el aviso "Vista previa".
+3. Si el navegador bloquea la ventana nueva, aparece el botón "Abrir WhatsApp con tu mensaje" dentro del carrito o diálogo abierto.
+4. Los temas aceptan también `data-theme="light"` y `"dark"`, que impone el visor de claude.ai, y `color-scheme` para los controles nativos. Sin JS, el modo oscuro del sistema aplica el tema Café.
+5. Márgenes seguros (`safe-area`) en la barra fija, el botón de WhatsApp y la barra de pedido, para teléfonos con muesca.
+6. El contenido se ve completo aunque la animación de entrada no corra (ya no arranca invisible). Mejora las miniaturas y el SEO.
+7. Nueva prueba: la ventana bloqueada muestra el botón de respaldo. Todas las pruebas pasan.
+8. Lo que **solo el dueño puede hacer**: crear la cuenta de Cloudflare, comprar el dominio, dar su número de WhatsApp y conseguir el permiso de las fotos.

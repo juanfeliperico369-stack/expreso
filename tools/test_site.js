@@ -29,7 +29,7 @@ const ok = (cond, msg) => { console.log((cond ? '  ✔ ' : '  ✘ ') + msg); if 
 
   // ---------- Escritorio ----------
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 860 } });
-  await ctx.addInitScript(() => { window.__wa = []; window.open = (u) => { window.__wa.push(u); return null; }; });
+  await ctx.addInitScript(() => { window.__wa = []; window.open = (u) => { window.__wa.push(u); return {}; }; });
   const page = await ctx.newPage(); watch(page);
   await page.goto(URL, { waitUntil: 'load' });
   console.log('Carga y estructura');
@@ -81,13 +81,17 @@ const ok = (cond, msg) => { console.log((cond ? '  ✔ ' : '  ✘ ') + msg); if 
   await page.click('#sendBtn');
   const wa = await page.evaluate(() => window.__wa[0] || '');
   const msg = decodeURIComponent(wa.split('text=')[1] || '');
-  ok(wa.startsWith('https://wa.me/573000000000?text='), 'abre WhatsApp con el número configurado');
+  ok(/^https:\/\/wa\.me\/\d*\?text=/.test(wa), 'abre WhatsApp con el pedido (número de CONFIG)');
   ok(msg.includes('2 × Tinto Clásico [GX-TINTO]') && msg.includes('1 × Cápsulas de Ganoderma') && /Total: \$\s?628\.300/.test(msg) && msg.includes('Medellín'), 'mensaje del pedido completo');
   if (shotsDir) await page.screenshot({ path: path.join(shotsDir, 'desk-cart.png') });
   await page.keyboard.press('Escape');
   await page.click('#cartBtn');
   await page.click('[data-q="capsulas"][data-d="-1"]');
   ok((await page.textContent('#cartN')) === '2', 'restar cantidad actualiza contador');
+  await page.evaluate(() => { window.__open = window.open; window.open = () => null; });
+  await page.click('#sendBtn');
+  ok(await page.isVisible('#waSheetA') && /^https:\/\/wa\.me\//.test(await page.getAttribute('#waSheetA', 'href')), 'si se bloquea la ventana, aparece botón "Abrir WhatsApp"');
+  await page.click('#waSheetX'); await page.evaluate(() => { window.open = window.__open; });
   await page.keyboard.press('Escape');
 
   console.log('Tema, quiz y formularios');
@@ -118,7 +122,7 @@ const ok = (cond, msg) => { console.log((cond ? '  ✔ ' : '  ✘ ') + msg); if 
   // ---------- v0.3: recomendador, referidos/UTM, enlace directo, vendedor ----------
   console.log('Recomendador, referidos y enlaces');
   const c3 = await browser.newContext({ viewport: { width: 1280, height: 860 } });
-  await c3.addInitScript(() => { window.__wa = []; window.open = (u) => { window.__wa.push(u); return null; }; });
+  await c3.addInitScript(() => { window.__wa = []; window.open = (u) => { window.__wa.push(u); return {}; }; });
   const p3 = await c3.newPage(); watch(p3);
   await p3.goto(URL + '?ref=Ana&utm_source=ig&utm_campaign=mitos', { waitUntil: 'load' });
   await p3.click('#reco [data-ro="0"]'); await p3.click('#reco [data-ro="1"]'); await p3.click('#reco [data-ro="0"]');
