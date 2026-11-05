@@ -277,9 +277,36 @@ dialog::backdrop{background:rgba(0,0,0,.55);backdrop-filter:blur(3px)}
 /* ============ FLOTANTES ============ */
 .wa{position:fixed;right:16px;bottom:16px;z-index:25;display:inline-flex;align-items:center;gap:.5rem;min-height:56px;padding:0 1.1rem 0 .9rem;border-radius:999px;background:#1f8f4e;color:#fff;font-weight:700;text-decoration:none;box-shadow:0 10px 26px rgba(0,0,0,.3)}
 .wa .ico{width:1.6em;height:1.6em}
-@media (max-width:520px){.wa span{display:none}.wa{padding:0;width:56px;justify-content:center}}
+@media (max-width:900px){.wa span{display:none}.wa{padding:0;width:56px;justify-content:center}}
 .toast{position:fixed;left:50%;bottom:86px;transform:translate(-50%,20px);opacity:0;z-index:60;background:var(--ink);color:var(--bg);padding:.7rem 1.1rem;border-radius:12px;font-weight:600;font-size:.9rem;transition:.25s;pointer-events:none;max-width:calc(100% - 32px);text-align:center}
 .toast.on{opacity:1;transform:translate(-50%,0)}
+
+/* ============ v0.3: recomendador, pasos, mini-carrito, vendedor ============ */
+.reco{margin:0 0 1.8rem}
+.reco .rq{font:700 clamp(1.05rem,2.6vw,1.35rem)/1.4 var(--fserif);margin:.2rem 0 .9rem}
+.rlist{display:grid;gap:.7rem;grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr));margin-top:.4rem}
+.ritem{display:grid;grid-template-columns:60px 1fr;gap:.4rem .8rem;align-items:center;background:var(--bg);border:2px solid var(--line);border-radius:14px;padding:.65rem}
+.ritem img,.ritem .ph-ico{width:60px;height:60px;object-fit:contain;background:var(--imgbg);border-radius:10px;padding:3px}
+.ritem b{display:block;font-size:.9rem;line-height:1.25}
+.ritem small{color:var(--muted)}
+.ritem .rb{grid-column:1/-1;display:flex;gap:.5rem;flex-wrap:wrap}
+.how{list-style:none;counter-reset:h;display:grid;grid-template-columns:repeat(3,1fr);margin:2rem 0 0;padding:0;border:3px solid var(--line)}
+.how li{padding:1rem 1.1rem;border-right:3px solid var(--line);font-size:.9rem}
+.how li:last-child{border-right:0}
+.how li::before{counter-increment:h;content:"0" counter(h);display:block;font:400 2.4rem/1 var(--fd);color:var(--accent)}
+.how b{display:block;font-weight:800;letter-spacing:.14em;text-transform:uppercase}
+@media (max-width:640px){.how{grid-template-columns:1fr}.how li{border-right:0;border-bottom:3px solid var(--line)}.how li:last-child{border-bottom:0}}
+.envbar{font-size:.85rem;margin:.4rem 0 .2rem}
+.bar{height:8px;border-radius:4px;background:color-mix(in srgb,var(--line) 18%,transparent);overflow:hidden;margin-top:.35rem}
+.bar i{display:block;height:100%;background:var(--teal)}
+.mini{position:fixed;left:16px;right:86px;bottom:16px;z-index:24;display:none;align-items:center;justify-content:space-between;gap:.6rem;min-height:56px;padding:0 1.2rem;white-space:nowrap;border:2px solid var(--line);border-radius:999px;background:var(--brand);color:var(--onBrand);font-weight:700;font-size:.9rem;cursor:pointer;box-shadow:var(--shadow)}
+@media (max-width:900px){.mini.on{display:flex}}
+.vtab{width:100%;border-collapse:collapse;margin-top:1rem;font-size:.92rem}
+.vtab td{padding:.5rem .3rem;border-bottom:1px solid color-mix(in srgb,var(--line) 25%,transparent)}
+.vtab td:last-child{text-align:right;font-weight:800}
+.vtab .neg{color:var(--accent)}.vtab .pos{color:var(--teal)}
+.vgrid{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
+@media (max-width:520px){.vgrid{grid-template-columns:1fr}}
 
 /* ============ ANIMACIÓN ============ */
 .js .rv{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
@@ -383,6 +410,7 @@ dialog::backdrop{background:rgba(0,0,0,.55);backdrop-filter:blur(3px)}
 <section class="sec" id="catalogo">
  <div class="wrap">
   <header class="sh rv"><p class="sh-n">Sesión 2:</p><h2 class="sh-t">Catálogo</h2></header>
+  <div class="dash reco rv" id="reco" aria-live="polite"></div>
   <div class="cat-banners" id="catBan">
    <button class="cban" type="button" data-cat="bebidas" aria-pressed="false"><img data-img="h-hero" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt=""><span>Bebidas</span></button>
    <button class="cban" type="button" data-cat="suplementos" aria-pressed="false"><img data-img="h-ganoderma" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt=""><span>Suplementos</span></button>
@@ -397,6 +425,7 @@ dialog::backdrop{background:rgba(0,0,0,.55);backdrop-filter:blur(3px)}
   <div class="grid" id="grid"></div>
   <noscript><p class="empty">Activa JavaScript para ver el catálogo o escríbenos por WhatsApp.</p></noscript>
   <p class="muted" style="font-size:.82rem;margin-top:1.2rem">Precios sugeridos en pesos colombianos (COP), IVA incluido. El envío se confirma según tu ciudad.</p>
+  <ol class="how rv"><li><b>Elige</b>Agrega tus productos al pedido.</li><li><b>Envía</b>Tu pedido llega ya armado a nuestro WhatsApp.</li><li><b>Recibe</b>Pagas como prefieras y te lo llevamos a casa.</li></ol>
  </div>
 </section>
 
@@ -471,6 +500,15 @@ dialog::backdrop{background:rgba(0,0,0,.55);backdrop-filter:blur(3px)}
     <label class="chk"><input type="checkbox" name="ok" required><span>Autorizo el tratamiento de mis datos según la <button class="linkb" type="button" data-legal="datos">política de datos</button> (Ley 1581 de 2012).</span></label>
     <button class="btn btn-a" type="submit"><svg class="ico"><use href="#i-wa"/></svg> Unirme por WhatsApp</button>
    </form>
+   <div class="dash" style="margin-top:1.6rem">
+    <p class="kicker" style="margin-top:0">Recomienda Expreso</p>
+    <p style="margin:.2rem 0 .8rem;font-size:.92rem">Crea tu enlace personal y compártelo. Cuando alguien pida desde tu enlace sabremos que llegó por ti, para agradecértelo.</p>
+    <form class="form" id="refForm" novalidate>
+     <label>Tu nombre<input name="ref" required maxlength="30" autocomplete="given-name"></label>
+     <button class="btn btn-t" type="submit">Crear y compartir mi enlace</button>
+    </form>
+    <p id="refOut" class="muted" style="font-size:.85rem;word-break:break-all;margin:.6rem 0 0"></p>
+   </div>
   </div>
   <div class="faq rv">
    <p class="kicker" style="margin-top:0">Preguntas frecuentes</p>
@@ -511,12 +549,14 @@ dialog::backdrop{background:rgba(0,0,0,.55);backdrop-filter:blur(3px)}
  <div class="dh"><h2 id="cartT">Tu pedido</h2><button class="ib" type="button" data-close aria-label="Cerrar carrito"><svg class="ico"><use href="#i-x"/></svg></button></div>
  <div class="db">
   <div id="cartList"></div>
+  <div class="envbar" id="envBar"></div>
   <div class="tot" id="cartTot"></div>
   <form class="form" id="pedido" novalidate>
    <label>Nombre<input name="nombre" required autocomplete="name" maxlength="60"></label>
    <label>Ciudad<input name="ciudad" required autocomplete="address-level2" maxlength="60"></label>
    <label>Dirección (opcional)<input name="dir" autocomplete="street-address" maxlength="120"></label>
    <label>Forma de pago<select name="pago" id="pagoSel"></select></label>
+   <label class="chk"><input type="checkbox" name="mes"><span>Quiero recibirlo cada mes. Te escribimos antes de cada envío y puedes cancelar cuando quieras.</span></label>
   </form>
  </div>
  <div class="df">
@@ -529,6 +569,27 @@ dialog::backdrop{background:rgba(0,0,0,.55);backdrop-filter:blur(3px)}
 <dialog class="modal" id="ficha" aria-labelledby="fT">
  <div class="mx"><button class="ib" type="button" data-close aria-label="Cerrar"><svg class="ico"><use href="#i-x"/></svg></button></div>
  <div class="mgrid" id="fichaBody"></div>
+</dialog>
+
+<button class="mini" id="miniCart" type="button"><span id="miniTxt">Ver pedido</span><span aria-hidden="true">→</span></button>
+
+<!-- Panel del vendedor (uso interno, se abre con #vendedor en la URL) -->
+<dialog class="modal" id="vendedor" aria-labelledby="vT">
+ <div class="mx"><button class="ib" type="button" data-close aria-label="Cerrar"><svg class="ico"><use href="#i-x"/></svg></button></div>
+ <div class="ltxt">
+  <h2 id="vT">Calculadora de margen</h2>
+  <p class="muted" style="font-size:.85rem">Uso interno. Los datos se quedan en este navegador. Fórmulas en GUIA-NEGOCIO.md §2b.</p>
+  <form class="form vgrid" id="vendForm">
+   <label>Precio de venta<input name="precio" type="number" min="0" step="100" inputmode="numeric"></label>
+   <label>Costo del producto<input name="costo" type="number" min="0" step="100" inputmode="numeric"></label>
+   <label>Envío que asumes<input name="envio" type="number" min="0" step="100" inputmode="numeric"></label>
+   <label>Costo de devolución<input name="dev" type="number" min="0" step="100" inputmode="numeric"></label>
+   <label>Comisión de pago (%)<input name="com" type="number" min="0" max="100" step="0.1" inputmode="decimal"></label>
+   <label>Publicidad por venta (CPA)<input name="cpa" type="number" min="0" step="100" inputmode="numeric"></label>
+   <label>Pedidos entregados (%)<input name="ent" type="number" min="0" max="100" step="1" inputmode="numeric"></label>
+  </form>
+  <table class="vtab"><tbody id="vendOut"></tbody></table>
+ </div>
 </dialog>
 
 <!-- Textos legales -->
@@ -698,6 +759,14 @@ const VIDEOS = [
 ];
 
 /* ---------- PREGUNTAS FRECUENTES ---------- */
+/* ---------- RECOMENDADOR "¿Cuál es para ti?": cada opción lleva a otro paso o a una lista de ids ---------- */
+const RECO = {
+  inicio:  { q:'¿Cómo lo prefieres?', o:[['Café','cafe'], ['Sin café','sincafe'], ['En cápsulas',['capsulas','excellium','cordygold']], ['Para piel o cabello',['ganosoap','transparent','shampoo','acondicionador','exfoliante','fresh']]] },
+  cafe:    { q:'¿Dulce o sin azúcar?', o:[['Dulce y cremoso',['cafe3en1']], ['Sin azúcar','cafesin']] },
+  cafesin: { q:'¿Cómo te gusta?', o:[['Negro, un tinto',['tinto']], ['Con crema',['latte']], ['Con chocolate',['mocha']]] },
+  sincafe: { q:'¿Qué se te antoja?', o:[['Chocolate',['schokolade','shoko']], ['Una infusión',['rooibos']], ['Algo para el desayuno',['cereal']], ['Colágeno',['colageno']]] }
+};
+
 const FAQ = [
   ['¿Los productos son originales?', 'Sí. Son productos Gano Excel Colombia comprados a través de distribuidores autorizados. Llegan sellados y con su registro o notificación sanitaria INVIMA.'],
   ['¿Cómo pago?', 'Cuando envías tu pedido por WhatsApp te compartimos los datos de pago: ' + CONFIG.pagos.join(', ') + '.'],
@@ -728,6 +797,26 @@ const foto = (p, cls = '') => IM['p-' + p.id] ? `<img src="${IM['p-' + p.id]}" a
 const BLANK = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
 let IM = {};
 const img = k => IM[k] || BLANK;
+/* origen del visitante: ?ref=Nombre (referidos) y ?utm_source=&utm_campaign= (anuncios/videos) */
+const limpio = (v, n) => String(v || '').replace(/[^\p{L}\p{N} _.\-]/gu, '').trim().slice(0, n);
+const ORIGEN = (() => {
+  const o = store.get('expreso.origen', {}) || {};
+  try {
+    const q = new URLSearchParams(location.search);
+    if (q.get('ref')) o.ref = limpio(q.get('ref'), 30);
+    if (q.get('utm_source')) { o.src = limpio(q.get('utm_source'), 30); o.camp = limpio(q.get('utm_campaign'), 40); }
+  } catch (e) { /* URL rara */ }
+  store.set('expreso.origen', o);
+  return o;
+})();
+const origenTxt = () => (ORIGEN.ref ? '\nRecomendado por: ' + ORIGEN.ref : '') + (ORIGEN.src ? '\nOrigen: ' + ORIGEN.src + (ORIGEN.camp ? ' / ' + ORIGEN.camp : '') : '');
+const baseURL = () => location.href.split(/[?#]/)[0];
+async function compartir(data, okMsg) {
+  try {
+    if (navigator.share) { await navigator.share(data); return; }
+    await navigator.clipboard.writeText(data.url); toast(okMsg || 'Enlace copiado');
+  } catch (e) { if (!e || e.name !== 'AbortError') toast('Copia este enlace: ' + data.url); }
+}
 const waURL = msg => 'https://wa.me/' + CONFIG.whatsapp + '?text=' + encodeURIComponent(msg);
 const openWA = msg => window.open(waURL(msg), '_blank', 'noopener');
 
@@ -820,11 +909,13 @@ function abrirFicha(id) {
         <button class="btn btn-a" type="button" data-addf="${p.id}">Agregar al pedido</button>`
         : `<a class="btn btn-a" href="${esc(avisame(p))}" target="_blank" rel="noopener">Avísame cuando llegue</a>`}
       </div>
-      <p><a class="btn btn-s" style="margin-top:.8rem" href="${esc(waURL('Hola Expreso, tengo una pregunta sobre ' + p.nombre + '.'))}" target="_blank" rel="noopener"><svg class="ico"><use href="#i-wa"/></svg> Preguntar</a></p>
+      <p><a class="btn btn-s" style="margin-top:.8rem" href="${esc(waURL('Hola Expreso, tengo una pregunta sobre ' + p.nombre + '.'))}" target="_blank" rel="noopener"><svg class="ico"><use href="#i-wa"/></svg> Preguntar</a> <button class="btn btn-s" style="margin-top:.8rem" type="button" data-share="${p.id}">Compartir</button></p>
       <p class="inv">Ref. ${esc(p.sku)}. ${p.invima ? 'Registro / notificación sanitaria INVIMA: ' + esc(p.invima) + '. ' : ''}${{ cuidado:'Producto cosmético.', accesorios:'' }[p.cat] ?? 'Suplemento dietario / alimento. No es un medicamento.'}</p>
     </div>`;
-  $('#ficha').showModal();
+  if (!$('#ficha').open) $('#ficha').showModal();
+  try { history.replaceState(null, '', '#p-' + id); } catch (e) {}
 }
+function fichaDesdeHash() { const m = location.hash.match(/^#p-([\w-]+)$/); if (m && BYID[m[1]]) abrirFicha(m[1]); if (location.hash === '#vendedor') abrirVendedor(); }
 
 /* ---------- carrito ---------- */
 let cart = store.get('expreso.cart', {});
@@ -870,6 +961,11 @@ function renderCart() {
     <div class="t"><span>Total${t.env == null ? ' productos' : ''}</span><span id="totT">${money(t.total)}</span></div>` : '';
   $('#pedido').hidden = !ids.length;
   $('#sendBtn').disabled = !ids.length;
+  const g = CONFIG.envioGratisDesde;
+  $('#envBar').innerHTML = (ids.length && g != null) ? (t.sub >= g ? '<b>¡Tu envío es gratis!</b>'
+    : `Te faltan <b>${money(g - t.sub)}</b> para envío gratis<div class="bar"><i style="width:${Math.round(t.sub / g * 100)}%"></i></div>`) : '';
+  $('#miniCart').classList.toggle('on', t.n > 0);
+  $('#miniTxt').textContent = 'Ver pedido (' + t.n + ') · ' + money(t.sub);
 }
 function mensajePedido(data) {
   const t = totals();
@@ -881,6 +977,8 @@ function mensajePedido(data) {
   L.push('Nombre: ' + data.nombre, 'Ciudad: ' + data.ciudad);
   if (data.dir) L.push('Dirección: ' + data.dir);
   L.push('Pago: ' + data.pago);
+  if (data.mes) L.push('Frecuencia: quiero recibirlo cada mes');
+  const og = origenTxt(); if (og) L.push(og.trim());
   return L.join('\n');
 }
 
@@ -920,6 +1018,53 @@ function answerQuiz(a) {
     ${m.url ? `<a href="${esc(m.url)}" target="_blank" rel="noopener">Fuente ↗</a>` : ''}</p>
     <button class="btn btn-a btn-s" type="button" data-qn>${qi + 1 < MITOS.length ? 'Siguiente' : 'Ver resultado'}</button>`;
   $('[data-qn]').focus();
+}
+
+/* ---------- recomendador ---------- */
+let recoPaso = 'inicio';
+function renderReco(ids) {
+  const box = $('#reco');
+  if (ids) {
+    box.innerHTML = `<p class="qz-n">¿Cuál es para ti? · Te recomendamos</p>
+      <div class="rlist">${ids.map(id => BYID[id]).filter(Boolean).map(p => `
+        <div class="ritem">${foto(p).replace(/alt="[^"]*"/, 'alt=""')}<div><b>${esc(p.nombre)}</b><small>${precioTxt(p)}</small></div>
+          <div class="rb">${vendible(p) ? `<button class="btn btn-a btn-s" type="button" data-add="${p.id}">Agregar</button>` : ''}<button class="btn btn-s" type="button" data-open="${p.id}">Ver</button></div></div>`).join('')}</div>
+      <p style="margin:.9rem 0 0"><button class="linkb" type="button" data-ro="inicio">Volver a empezar</button></p>`;
+    return;
+  }
+  const n = RECO[recoPaso] || RECO.inicio;
+  box.innerHTML = `<p class="qz-n">¿No sabes cuál elegir? · ¿Cuál es para ti?</p><p class="rq">${esc(n.q)}</p>
+    <div class="chips">${n.o.map((o, i) => `<button class="chip" type="button" data-ro="${i}">${esc(o[0])}</button>`).join('')}</div>
+    ${recoPaso !== 'inicio' ? '<p style="margin:.9rem 0 0"><button class="linkb" type="button" data-ro="inicio">Volver a empezar</button></p>' : ''}`;
+}
+function elegirReco(v) {
+  if (v === 'inicio') { recoPaso = 'inicio'; renderReco(); return; }
+  const o = (RECO[recoPaso] || RECO.inicio).o[Number(v)]; if (!o) return;
+  if (Array.isArray(o[1])) renderReco(o[1]); else { recoPaso = o[1]; renderReco(); }
+}
+
+/* ---------- panel del vendedor (#vendedor) ---------- */
+const VEND_DEF = { precio:147900, costo:103530, envio:12000, dev:8000, com:3.5, cpa:30000, ent:100 };
+function calcVendedor() {
+  const f = $('#vendForm'), v = {};
+  for (const k in VEND_DEF) v[k] = Math.max(0, Number(f[k].value) || 0);
+  store.set('expreso.vend', v);
+  const e = Math.min(100, v.ent) / 100, c = Math.min(100, v.com) / 100;
+  const bruto = e * (v.precio - v.costo - c * v.precio) - v.envio - (1 - e) * v.dev;
+  const neto = bruto - v.cpa;
+  const roas = bruto > 0 ? (e * v.precio) / bruto : null;
+  const fila = (a, b, cls = '') => `<tr><td>${a}</td><td class="${cls}">${b}</td></tr>`;
+  $('#vendOut').innerHTML =
+    fila('Utilidad por pedido, antes de publicidad', money(bruto), bruto >= 0 ? 'pos' : 'neg') +
+    fila('Utilidad por pedido, después de publicidad', money(neto), neto >= 0 ? 'pos' : 'neg') +
+    fila('Máximo a pagar en anuncios por venta', money(Math.max(0, bruto))) +
+    fila('ROAS mínimo para no perder', roas ? roas.toFixed(1) + '×' : 'No hay margen') +
+    fila('Margen sobre la venta (antes de publicidad)', v.precio ? Math.round(bruto / (e * v.precio || 1) * 100) + ' %' : '—');
+}
+function abrirVendedor() {
+  const v = Object.assign({}, VEND_DEF, store.get('expreso.vend', {}) || {}), f = $('#vendForm');
+  for (const k in VEND_DEF) f[k].value = v[k];
+  calcVendedor(); if (!$('#vendedor').open) $('#vendedor').showModal();
 }
 
 /* ---------- otros bloques ---------- */
@@ -981,6 +1126,8 @@ function bind() {
     else if ('qn' in d) { qi++; renderQuiz(); }
     else if ('qr' in d) { qi = 0; qs = 0; renderQuiz(); }
     else if (d.legal) abrirLegal(d.legal);
+    else if (d.ro) elegirReco(d.ro);
+    else if (d.share) { const p = BYID[d.share]; compartir({ title:p.nombre + ' · Expreso', text:p.desc, url:baseURL() + '#p-' + p.id }); }
     else if ('temaCiclo' in d) cicloTema();
     if ('close' in d) { const dl = t.closest('dialog'); if (dl) dl.close(); }
   });
@@ -1005,9 +1152,21 @@ function bind() {
     e.preventDefault(); const f = e.target;
     if (!f.checkValidity()) { f.reportValidity(); return; }
     const d = Object.fromEntries(new FormData(f));
-    openWA(`Hola Expreso, quiero unirme al Club.\nNombre: ${String(d.nombre).trim()}\nCiudad: ${String(d.ciudad).trim()}\nMe interesa: ${d.interes}\nAutorizo el tratamiento de mis datos (Ley 1581 de 2012).`);
+    openWA(`Hola Expreso, quiero unirme al Club.\nNombre: ${String(d.nombre).trim()}\nCiudad: ${String(d.ciudad).trim()}\nMe interesa: ${d.interes}\nAutorizo el tratamiento de mis datos (Ley 1581 de 2012).` + origenTxt());
     toast('Abriendo WhatsApp…');
   });
+  $('#refForm').addEventListener('submit', e => {
+    e.preventDefault(); const f = e.target;
+    if (!f.checkValidity()) { f.reportValidity(); return; }
+    const n = limpio(f.ref.value, 30); if (!n) { f.reportValidity(); return; }
+    const url = baseURL() + '?ref=' + encodeURIComponent(n);
+    $('#refOut').textContent = 'Tu enlace: ' + url;
+    compartir({ title:'Expreso', text:'Café con Ganoderma, explicado claro. Pide aquí:', url }, 'Enlace copiado: compártelo');
+  });
+  $('#miniCart').addEventListener('click', () => $('#cartBtn').click());
+  $('#vendForm').addEventListener('input', calcVendedor);
+  $('#ficha').addEventListener('close', () => { if (/^#p-/.test(location.hash)) try { history.replaceState(null, '', baseURL() + location.search); } catch (e) {} });
+  window.addEventListener('hashchange', fichaDesdeHash);
   window.addEventListener('storage', e => { if (e.key === 'expreso.cart') { cart = store.get('expreso.cart', {}); cleanCart(); renderCart(); } });
 }
 
@@ -1023,7 +1182,9 @@ function init() {
   $('#statN').textContent = PRODUCTOS.filter(vendible).length;
   $('#yr').textContent = new Date().getFullYear();
   renderChips(); renderGrid(); renderCart(); renderCiencia(); renderQuiz(); renderTV(); renderFAQ(); renderRedes(); jsonLD();
+  renderReco();
   bind(); reveal();
+  fichaDesdeHash();
 }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();

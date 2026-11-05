@@ -58,6 +58,15 @@
 5. **`VIDEOS`**: pega la URL de cada video de TikTok, Reels o YouTube en `url` y la tarjeta cambia de "Pronto" a "Ver".
 6. **`FAQ`** y **`LEGAL`**: textos de preguntas frecuentes, política de datos y retracto.
 7. **Después de editar**, corre `node tools/test_site.js`. Debe terminar en "Todas las pruebas pasaron".
+8. **`RECO`**: el árbol del recomendador "¿Cuál es para ti?". Cada opción lleva a otro paso (texto) o a una lista de ids de productos.
+
+### Enlaces útiles para marketing (v0.3)
+- **Enlace directo a un producto:** `https://TU-DOMINIO/#p-<id>`, por ejemplo `#p-mocha`. Abre la ficha. Sirve para la bio, las descripciones de los videos y los anuncios. La ficha tiene el botón **Compartir**.
+- **Medir de dónde vienen los pedidos (sin analítica):** agrega `?utm_source=instagram&utm_campaign=reel-mitos` al enlace que publiques. El pedido de WhatsApp llega con "Origen: instagram / reel-mitos". Se guarda en el navegador del cliente, así que también cuenta si compra días después.
+- **Referidos:** `?ref=Nombre`. El pedido llega con "Recomendado por: Nombre". En la sección Club el cliente crea su propio enlace. Es la base para la fase 2: saber quién trae clientes y quién podría ser socio.
+- **Panel del vendedor:** `https://TU-DOMINIO/#vendedor`. Es una calculadora de margen (precio, costo, envío, devolución, comisión, CPA y % de entrega) que da la utilidad por pedido, el máximo a pagar en anuncios y el ROAS de equilibrio. No está enlazada en la web pública y los datos se quedan en el navegador. **Nunca escribas costos reales en el código: la página es pública.**
+- **Pedido mensual:** el cliente marca "Quiero recibirlo cada mes" y el pedido llega con "Frecuencia: quiero recibirlo cada mes". Haz el seguimiento con etiquetas de WhatsApp Business.
+- **Envío gratis:** si pones un valor en `CONFIG.envioGratisDesde`, el carrito muestra una barra de "Te faltan $X para envío gratis".
 
 ## 5. Decisiones tomadas (y por qué)
 
@@ -83,7 +92,8 @@
 6. Revisar la política de distribuidores de Gano Excel: ¿se puede vender en Mercado Libre o redes? ¿hay precio mínimo?
 7. Analítica: Google Analytics 4 o Plausible, y el píxel de Meta (requiere aviso de cookies).
 8. Captación de correos (Brevo o MailerLite) y ofrecer un formulario real además de WhatsApp.
-9. Fase 2: páginas por producto (SEO), blog/revista, reseñas reales de clientes y programa de referidos.
+9. Fase 2: páginas por producto (SEO), blog/revista y reseñas reales de clientes. Los referidos ya funcionan con `?ref=`.
+10. Kits o combos con descuento (por ejemplo Desayuno: Tinto + C'Real) cuando el dueño confirme sus márgenes con la calculadora `#vendedor`.
 
 ## 7. Prompt de traspaso (cópialo a la próxima IA)
 
@@ -123,3 +133,15 @@ Tarea de hoy: <...>
 8. Corrección: la ficha de producto se veía mal en escritorio (las columnas usan ahora `minmax(0,…)`).
 9. Se agregó a `GUIA-NEGOCIO.md` la sección "2b. Dropshipping en Colombia".
 10. Pruebas: `node tools/test_site.js` pasa completo (21 productos, filtro de accesorios, Avísame con SKU, evidencia, quiz y todo lo de v0.1).
+
+### Sesión 3 · 2026-11-05 · v0.3 (conversión y medición)
+1. Recomendador "¿Cuál es para ti?" en el catálogo: un árbol de 2 a 3 preguntas (`RECO`) que termina en productos con los botones Agregar y Ver.
+2. Enlaces directos a productos (`#p-<id>`) y botón Compartir en la ficha. Usa Web Share o, si no está disponible, copia el enlace.
+3. Medición sin analítica: `?utm_source`, `?utm_campaign` y `?ref` se guardan en el navegador y salen en el mensaje del pedido y del Club.
+4. Programa de referidos: el cliente genera su enlace `?ref=Nombre` desde la sección Club.
+5. Opción "Quiero recibirlo cada mes" en el carrito, para fomentar la recompra.
+6. Barra fija "Ver pedido (n) · $total" en móvil cuando hay productos; el botón de WhatsApp pasa a ser solo ícono en pantallas de 900 px o menos.
+7. Barra de envío gratis, que solo aparece si se configura `CONFIG.envioGratisDesde`.
+8. Bloque "01 Elige · 02 Envía · 03 Recibe" bajo el catálogo, para generar confianza.
+9. Panel interno `#vendedor`: calculadora de margen y ROAS de equilibrio, con la misma lógica de la guía §2b.
+10. Pruebas: 49 verificaciones de `tools/test_site.js` pasan, con nuevas pruebas para cada función y sin errores de consola.

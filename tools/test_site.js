@@ -115,6 +115,37 @@ const ok = (cond, msg) => { console.log((cond ? '  ✔ ' : '  ✘ ') + msg); if 
   await page.keyboard.press('Escape');
   await ctx.close();
 
+  // ---------- v0.3: recomendador, referidos/UTM, enlace directo, vendedor ----------
+  console.log('Recomendador, referidos y enlaces');
+  const c3 = await browser.newContext({ viewport: { width: 1280, height: 860 } });
+  await c3.addInitScript(() => { window.__wa = []; window.open = (u) => { window.__wa.push(u); return null; }; });
+  const p3 = await c3.newPage(); watch(p3);
+  await p3.goto(URL + '?ref=Ana&utm_source=ig&utm_campaign=mitos', { waitUntil: 'load' });
+  await p3.click('#reco [data-ro="0"]'); await p3.click('#reco [data-ro="1"]'); await p3.click('#reco [data-ro="0"]');
+  ok(/Tinto Clásico/.test(await p3.textContent('#reco')), 'recomendador: Café → Sin azúcar → Negro = Tinto');
+  await p3.click('#reco [data-add="tinto"]');
+  ok((await p3.textContent('#cartN')) === '1', 'agregar desde el recomendador');
+  await p3.click('#reco [data-ro="inicio"]');
+  ok(/¿Cómo lo prefieres\?/.test(await p3.textContent('#reco')), 'recomendador reinicia');
+  await p3.click('#cartBtn');
+  await p3.fill('#pedido [name=nombre]', 'Leo'); await p3.fill('#pedido [name=ciudad]', 'Bogotá');
+  await p3.check('#pedido [name=mes]'); await p3.click('#sendBtn');
+  const m3 = decodeURIComponent((await p3.evaluate(() => window.__wa[0] || '')).split('text=')[1] || '');
+  ok(m3.includes('Recomendado por: Ana') && m3.includes('Origen: ig / mitos') && m3.includes('cada mes'), 'pedido incluye referido, origen UTM y pedido mensual');
+  await p3.keyboard.press('Escape');
+  await p3.fill('#refForm [name=ref]', 'Ana María'); await p3.click('#refForm [type=submit]');
+  ok(/\?ref=Ana%20Mar%C3%ADa/.test(await p3.textContent('#refOut')), 'genera enlace de referido');
+  await p3.goto(URL + '#p-mocha', { waitUntil: 'load' });
+  ok(await p3.isVisible('#ficha') && /Mocha Rico/.test(await p3.textContent('#ficha')), 'enlace directo #p-mocha abre la ficha');
+  ok(await p3.locator('#ficha [data-share="mocha"]').count() === 1, 'ficha tiene botón Compartir');
+  await p3.keyboard.press('Escape'); await p3.waitForTimeout(150);
+  ok(!(await p3.evaluate(() => location.hash)), 'cerrar ficha limpia el enlace');
+  await p3.goto(URL + 'index.html#vendedor', { waitUntil: 'load' });
+  ok(await p3.isVisible('#vendedor') && /\$\s?27\.19\d/.test(await p3.textContent('#vendOut')), 'calculadora del vendedor: utilidad antes de pauta = $27.194');
+  await p3.fill('#vendForm [name=ent]', '60');
+  ok(/\$\s?8\.316/.test(await p3.textContent('#vendOut')), 'calculadora recalcula con 60 % de entrega');
+  await c3.close();
+
   // ---------- Móvil, todos los temas ----------
   console.log('Móvil 375px');
   for (const tema of ['revista', 'cafe', 'bosque', 'contraste']) {
@@ -129,6 +160,10 @@ const ok = (cond, msg) => { console.log((cond ? '  ✔ ' : '  ✘ ') + msg); if 
       await p.click('#links a[href="#catalogo"]'); ok(!(await p.isVisible('#links a[href="#ciencia"]')), 'menú móvil cierra al navegar');
       const small = await p.$$eval('button:not(.sr):not(.linkb), .btn', bs => bs.filter(b => { const r = b.getBoundingClientRect(); return r.width && r.height && r.height < 40; }).map(b => b.textContent.trim().slice(0, 20)));
       ok(small.length === 0, 'botones táctiles ≥ 40px ' + small.join('|'));
+      await p.click('[data-add="latte"]');
+      ok(await p.isVisible('#miniCart'), 'barra de pedido visible en móvil al agregar');
+      const ov = await p.evaluate(() => { const a = document.querySelector('#miniCart').getBoundingClientRect(), b = document.querySelector('#waFloat').getBoundingClientRect(); return a.right > b.left && a.bottom > b.top; });
+      ok(!ov, 'barra de pedido no tapa el botón de WhatsApp');
     }
     if (shotsDir) { await p.evaluate(() => scrollTo(0, 0)); await p.waitForTimeout(150); await p.screenshot({ path: path.join(shotsDir, `m-${tema}.png`) }); }
     await c.close();
