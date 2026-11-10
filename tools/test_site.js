@@ -34,6 +34,8 @@ const ok = (cond, msg) => { console.log((cond ? '  ✔ ' : '  ✘ ') + msg); if 
   await page.goto(URL, { waitUntil: 'load' });
   console.log('Carga y estructura');
   const n = await page.locator('#grid .card').count();
+  ok(!(await page.isVisible('#waSheet')), 'botón de respaldo de WhatsApp oculto al cargar');
+  await page.click('#cartBtn'); ok(!(await page.isVisible('#pedido')), 'carrito vacío oculta el formulario de pedido'); await page.keyboard.press('Escape');
   ok(n === 21, `21 productos renderizados: 18 + 3 próximamente (${n})`);
   const blank = await page.$$eval('#grid img', ims => ims.filter(i => !i.src.startsWith('data:image/webp') || i.naturalWidth < 10).length);
   ok(blank === 0, `todas las fotos de producto cargan (${blank} sin foto)`);
@@ -53,6 +55,11 @@ const ok = (cond, msg) => { console.log((cond ? '  ✔ ' : '  ✘ ') + msg); if 
   await page.click('[data-chip="todos"]');
   await page.fill('#q', 'chocolate'); await page.waitForTimeout(250);
   ok(await page.locator('#grid .card').count() === 3, 'búsqueda "chocolate" = 3');
+  for (const [q, n, inc] of [['reishi', 18, ''], ['pelo', 2, 'Shampoo'], ['te', 1, 'Rooibos'], ['cafe sin azucar', 3, 'Tinto']]) {
+    await page.fill('#q', q); await page.waitForTimeout(250);
+    const c = await page.locator('#grid .card').count();
+    ok(c === n && (!inc || (await page.textContent('#grid')).includes(inc)), `búsqueda "${q}" = ${n} (${c})`);
+  }
   await page.fill('#q', 'zzzz'); await page.waitForTimeout(250);
   ok(await page.locator('#grid .empty').count() === 1, 'búsqueda sin resultados muestra aviso');
   await page.fill('#q', ''); await page.waitForTimeout(250);
@@ -149,6 +156,10 @@ const ok = (cond, msg) => { console.log((cond ? '  ✔ ' : '  ✘ ') + msg); if 
   await p3.fill('#vendForm [name=ent]', '60');
   ok(/\$\s?8\.316/.test(await p3.textContent('#vendOut')), 'calculadora recalcula con 60 % de entrega');
   await p3.keyboard.press('Escape'); await p3.waitForTimeout(150);
+  const k0 = Number(await p3.textContent('#cartN'));
+  ok(await p3.locator('#kits .kit').count() === 4, 'combos: 4 visibles');
+  await p3.click('[data-kit="desayuno"]');
+  ok(Number(await p3.textContent('#cartN')) === k0 + 2, 'agregar combo suma sus 2 productos');
   await p3.setViewportSize({ width: 1000, height: 800 });
   ok(await p3.evaluate(() => document.documentElement.scrollWidth) <= 1000, 'sin scroll horizontal a 1000px (menú de escritorio)');
   ok(await p3.locator('.art details').count() === 3, 'revista: 3 artículos');
@@ -179,6 +190,21 @@ const ok = (cond, msg) => { console.log((cond ? '  ✔ ' : '  ✘ ') + msg); if 
     await c.close();
   }
 
+  let axePath = null; try { axePath = require.resolve('axe-core/axe.min.js', { paths: [ROOT] }); } catch (e) {}
+  if (axePath) {
+    console.log('Accesibilidad (axe-core)');
+    const axeSrc = fs.readFileSync(axePath, 'utf8');
+    for (const tema of ['revista', 'cafe', 'bosque', 'contraste']) {
+      const c = await browser.newContext({ viewport: { width: 375, height: 800 }, reducedMotion: 'reduce' });
+      await c.addInitScript(t => { try { localStorage.setItem('expreso.tema', JSON.stringify(t)); } catch (e) {} }, tema);
+      const p = await c.newPage(); await p.goto(URL, { waitUntil: 'load' });
+      await p.evaluate(() => document.querySelectorAll('.rv').forEach(e => e.classList.add('in')));
+      await p.addScriptTag({ content: axeSrc });
+      const v = await p.evaluate(async () => (await axe.run(document, { resultTypes: ['violations'] })).violations.filter(v => ['serious', 'critical'].includes(v.impact)).map(v => v.id + '×' + v.nodes.length));
+      ok(v.length === 0, `${tema}: sin fallas graves de accesibilidad ${v.join(' ')}`);
+      await c.close();
+    }
+  } else console.log('  (axe-core no instalado: corre "npm install" para incluir la auditoría de accesibilidad)');
   ok(errors.length === 0, 'sin errores de consola/red ' + (errors.length ? '\n    ' + errors.join('\n    ') : ''));
   await browser.close(); server.close();
   console.log(fails ? `\n${fails} prueba(s) fallaron` : '\nTodas las pruebas pasaron');

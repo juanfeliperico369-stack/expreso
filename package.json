@@ -1,0 +1,12 @@
+{
+  "name": "expreso",
+  "private": true,
+  "description": "Tienda Expreso: web de un solo archivo (index.html). Ver BITACORA.md.",
+  "scripts": {
+    "test": "node tools/test_site.js",
+    "imgs": "python3 tools/inline_imgs.py"
+  },
+  "devDependencies": {
+    "axe-core": "4.10.2"
+  }
+}

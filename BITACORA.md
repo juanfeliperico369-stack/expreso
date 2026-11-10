@@ -22,6 +22,7 @@
 | `index.html` | **La web completa en un solo archivo** (HTML + CSS + JS + imágenes en base64 al final). Sin dependencias, salvo Google Fonts. |
 | `assets/img/*.webp` | Fotos originales optimizadas. `p-<id>` = producto, `h-<nombre>` = foto de sección. |
 | `tools/inline_imgs.py` | Vuelve a meter las fotos de `assets/img/` dentro de `index.html`. Correr después de agregar o cambiar fotos. |
+| `package.json` | `npm install` instala axe-core, y entonces `npm test` también audita la accesibilidad de los 4 temas. |
 | `tools/test_site.js` | Pruebas automáticas con Playwright. `node tools/test_site.js` (opcional `--shots carpeta` para capturas). |
 | `tools/set_domain.py` | `python3 tools/set_domain.py https://tu-dominio.com` llena canonical/og:image en `index.html` y crea `robots.txt` + `sitemap.xml`. |
 | `_headers` | Cabeceras de seguridad y caché (Cloudflare Pages / Netlify las aplican solas). |
@@ -61,6 +62,8 @@
 5. **`VIDEOS`**: pega la URL de cada video de TikTok, Reels o YouTube en `url` y la tarjeta cambia de "Pronto" a "Ver".
 6. **`FAQ`** y **`LEGAL`**: textos de preguntas frecuentes, política de datos y retracto.
 7. **Después de editar**, corre `node tools/test_site.js`. Debe terminar en "Todas las pruebas pasaron".
+9. **`KITS`**: combos (`id`, `nombre`, `items[]`, `desc`). El total es la suma de los productos y "Agregar combo" los suma al carrito. No tiene descuento porque el carrito es por producto. Si algún día quieres descuento, hay que guardar el combo como una línea propia del carrito.
+10. **`SINONIMOS`**: palabras que la gente escribe y la del catálogo a la que equivalen (reishi→ganoderma, pelo→cabello, té→infusión…). El buscador exige que aparezcan todas las palabras.
 8. **`RECO`**: el árbol del recomendador "¿Cuál es para ti?". Cada opción lleva a otro paso (texto) o a una lista de ids de productos.
 
 ### Enlaces útiles para marketing (v0.3)
@@ -170,3 +173,13 @@ Tarea de hoy: <...>
 6. El contenido se ve completo aunque la animación de entrada no corra (ya no arranca invisible). Mejora las miniaturas y el SEO.
 7. Nueva prueba: la ventana bloqueada muestra el botón de respaldo. Todas las pruebas pasan.
 8. Lo que **solo el dueño puede hacer**: crear la cuenta de Cloudflare, comprar el dominio, dar su número de WhatsApp y conseguir el permiso de las fotos.
+
+### Sesión 6 · 2026-11-10 · v0.6 (calidad + combos + buscador)
+1. Auditoría con axe-core en los 4 temas, escritorio y móvil, y con html-validate. Se corrigieron 3 contrastes insuficientes (insignia "Limitada", verde de WhatsApp y el rojo de acento sobre amarillo, que pasó de `#c23a2a` a `#b23424`) y el botón flotante quedó dentro de un landmark (`<aside>`).
+2. HTML: `type` en todos los inputs, `autocomplete` válido en la dirección, botón de política de datos fuera del `<label>`, botón Calcular (sin recarga) en `#vendedor` y `DOCTYPE` en mayúsculas. html-validate ya no reporta errores.
+3. **Fallo corregido:** el CSS anulaba el atributo `hidden`, así que el respaldo "Abrir WhatsApp" se veía siempre y el formulario del carrito vacío no se ocultaba. Se agregó la regla global `[hidden]{display:none!important}` y pruebas para ambos casos.
+4. Combos (`KITS`): 4 tarjetas (Desayuno, Día y Noche, Antojo, Cabello) con el total y "Agregar combo".
+5. Buscador por palabras con `SINONIMOS` y plurales: "reishi" devuelve 18, "pelo" 2, "te" el Rooibos, "cafe sin azucar" 3.
+6. `package.json` (con axe-core como devDependency) y `.gitignore`. `npm test` ejecuta todo.
+7. Pruebas: todas pasan, incluida la de accesibilidad.
+8. Se volvió a publicar la vista previa en el mismo enlace.

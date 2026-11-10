@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es-CO" data-theme="revista">
 <head>
 <meta charset="utf-8">
@@ -20,7 +20,7 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Store","name":"Expreso","description":"Distribuidor independiente de productos Gano Excel en Colombia: café, bebidas y suplementos con Ganoderma lucidum.","areaServed":"CO","currenciesAccepted":"COP","priceRange":"$96.900 - $424.500"}</script>
 <style>
 /* ============ TOKENS / TEMAS ============ */
-:root,[data-theme=revista],[data-theme=light]{color-scheme:light;--bg:#fffdf5;--paper:#fbe8a8;--paper2:#a6abb1;--card:#fff;--ink:#121417;--muted:#4a4f57;--brand:#134a72;--teal:#0f7470;--accent:#c23a2a;--band:#e9e2c0;--bandInk:#12616f;--line:#121417;--onBrand:#fff;--imgbg:#f5efe0;--shadow:0 14px 34px rgba(18,20,23,.14);--glass:rgba(255,253,245,.9)}
+:root,[data-theme=revista],[data-theme=light]{color-scheme:light;--bg:#fffdf5;--paper:#fbe8a8;--paper2:#a6abb1;--card:#fff;--ink:#121417;--muted:#4a4f57;--brand:#134a72;--teal:#0f7470;--accent:#b23424;--band:#e9e2c0;--bandInk:#12616f;--line:#121417;--onBrand:#fff;--imgbg:#f5efe0;--shadow:0 14px 34px rgba(18,20,23,.14);--glass:rgba(255,253,245,.9)}
 [data-theme=revista] .s-grey{--muted:#23272d}
 [data-theme=cafe],[data-theme=dark]{color-scheme:dark;--bg:#15100c;--paper:#221a12;--paper2:#2c231a;--card:#211912;--ink:#f6ead2;--muted:#cdb894;--brand:#e6b866;--teal:#8fd3c1;--accent:#ff8a6b;--band:#33271b;--bandInk:#f5cf78;--line:#e6d3b0;--onBrand:#1b1208;--imgbg:#f3ead8;--shadow:0 14px 34px rgba(0,0,0,.45);--glass:rgba(21,16,12,.9)}
 @media (prefers-color-scheme:dark){:root:not([data-theme]){color-scheme:dark;--bg:#15100c;--paper:#221a12;--paper2:#2c231a;--card:#211912;--ink:#f6ead2;--muted:#cdb894;--brand:#e6b866;--teal:#8fd3c1;--accent:#ff8a6b;--band:#33271b;--bandInk:#f5cf78;--line:#e6d3b0;--onBrand:#1b1208;--imgbg:#f3ead8;--shadow:0 14px 34px rgba(0,0,0,.45);--glass:rgba(21,16,12,.9)}}
@@ -30,6 +30,7 @@
 
 /* ============ BASE ============ */
 *,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
 html{-webkit-text-size-adjust:100%;background:var(--bg)}
 body{margin:0;background:var(--bg);color:var(--ink);font:400 1rem/1.6 var(--fs);overflow-x:hidden}
 img{max-width:100%;display:block}
@@ -182,7 +183,7 @@ ul.dot li::marker{color:var(--accent)}
 .evc p{margin:0;font-size:.92rem}
 .evc a{font-size:.8rem;font-weight:600;color:var(--brand);margin-top:auto;word-break:break-word}
 .lvl{align-self:flex-start;font-size:.68rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:.3em .7em;border-radius:6px;border:2px solid currentColor}
-.lvl-solida{color:var(--teal)}.lvl-moderada{color:var(--brand)}.lvl-limitada{color:#b0700b}.lvl-insuficiente{color:var(--accent)}
+.lvl-solida{color:var(--teal)}.lvl-moderada{color:var(--brand)}.lvl-limitada{color:#855400}.lvl-insuficiente{color:var(--accent)}
 [data-theme=cafe] .lvl-limitada,[data-theme=bosque] .lvl-limitada{color:#f3c56b}[data-theme=contraste] .lvl-limitada{color:#ffe600}
 .dash{border:4px dashed var(--line);border-radius:6px;padding:clamp(1.1rem,3vw,1.8rem);background:var(--card);margin-top:2rem}
 .quiz{text-align:center}
@@ -277,7 +278,7 @@ dialog::backdrop{background:rgba(0,0,0,.55);backdrop-filter:blur(3px)}
 .ltxt p,.ltxt li{font-size:.92rem}
 
 /* ============ FLOTANTES ============ */
-.wa{position:fixed;right:calc(16px + env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:25;display:inline-flex;align-items:center;gap:.5rem;min-height:56px;padding:0 1.1rem 0 .9rem;border-radius:999px;background:#1f8f4e;color:#fff;font-weight:700;text-decoration:none;box-shadow:0 10px 26px rgba(0,0,0,.3)}
+.wa{position:fixed;right:calc(16px + env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:25;display:inline-flex;align-items:center;gap:.5rem;min-height:56px;padding:0 1.1rem 0 .9rem;border-radius:999px;background:#157341;color:#fff;font-weight:700;text-decoration:none;box-shadow:0 10px 26px rgba(0,0,0,.3)}
 .wa .ico{width:1.6em;height:1.6em}
 @media (max-width:900px){.wa span{display:none}.wa{padding:0;width:56px;justify-content:center}}
 .toast{position:fixed;left:50%;bottom:86px;transform:translate(-50%,20px);opacity:0;z-index:60;background:var(--ink);color:var(--bg);padding:.7rem 1.1rem;border-radius:12px;font-weight:600;font-size:.9rem;transition:.25s;pointer-events:none;max-width:calc(100% - 32px);text-align:center}
@@ -324,7 +325,17 @@ dialog::backdrop{background:rgba(0,0,0,.55);backdrop-filter:blur(3px)}
 
 .wash{position:fixed;left:0;right:0;bottom:0;z-index:70;display:flex;align-items:center;justify-content:center;gap:.6rem;flex-wrap:wrap;padding:1rem max(16px,env(safe-area-inset-right,0px)) calc(1rem + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));background:var(--ink);color:var(--bg);box-shadow:0 -10px 30px rgba(0,0,0,.3)}
 .wash .btn{border-color:var(--bg);color:var(--bg)}
-.wash .btn-a{background:#1f8f4e;border-color:#1f8f4e;color:#fff}
+.wash .btn-a{background:#157341;border-color:#157341;color:#fff}
+
+.kits{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr));gap:1rem;margin:0 0 1.8rem}
+.kit{display:flex;flex-direction:column;gap:.5rem;border:3px solid var(--line);padding:1rem;background:var(--paper)}
+.kit-ims{display:flex;align-items:center;height:72px}
+.kit-ims img,.kit-ims .ph-ico{width:72px;height:72px;object-fit:contain;background:var(--imgbg);border-radius:50%;border:2px solid var(--line);padding:6px}
+.kit-ims>*+*{margin-left:-18px}
+.kit h3{margin:0;font:400 1.7rem/1 var(--fd);letter-spacing:.03em;color:var(--brand)}
+.kit p{margin:0;font-size:.86rem;color:var(--muted)}
+.kit .card-f{margin-top:auto}
+.kits-t{grid-column:1/-1;margin:0;font-size:.75rem;font-weight:800;letter-spacing:.25em;text-transform:uppercase;color:var(--muted)}
 
 /* ============ ANIMACIÓN ============ */
 .js .rv{transform:translateY(16px);transition:transform .7s ease}
@@ -429,6 +440,7 @@ dialog::backdrop{background:rgba(0,0,0,.55);backdrop-filter:blur(3px)}
  <div class="wrap">
   <header class="sh rv"><p class="sh-n">Sesión 2:</p><h2 class="sh-t">Catálogo</h2></header>
   <div class="dash reco rv" id="reco" aria-live="polite"></div>
+  <div class="kits rv" id="kits"></div>
   <div class="cat-banners" id="catBan">
    <button class="cban" type="button" data-cat="bebidas" aria-pressed="false"><img data-img="h-hero" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt=""><span>Bebidas</span></button>
    <button class="cban" type="button" data-cat="suplementos" aria-pressed="false"><img data-img="h-ganoderma" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt=""><span>Suplementos</span></button>
@@ -546,17 +558,18 @@ dialog::backdrop{background:rgba(0,0,0,.55);backdrop-filter:blur(3px)}
    <header class="sh"><p class="sh-n">Club</p><h2 class="sh-t">Expreso</h2></header>
    <p>Recetas, novedades, descuentos y respuestas directas. Déjanos tus datos y seguimos la conversación por WhatsApp.</p>
    <form class="form" id="clubForm" novalidate>
-    <label>Nombre<input name="nombre" required autocomplete="given-name" maxlength="60"></label>
-    <label>Ciudad<input name="ciudad" required autocomplete="address-level2" maxlength="60"></label>
+    <label>Nombre<input type="text" name="nombre" required autocomplete="given-name" maxlength="60"></label>
+    <label>Ciudad<input type="text" name="ciudad" required autocomplete="address-level2" maxlength="60"></label>
     <label>Me interesa<select name="interes"><option>Comprar productos</option><option>Aprender sobre Ganoderma</option><option>Recetas y rituales</option><option>Ser distribuidor</option></select></label>
-    <label class="chk"><input type="checkbox" name="ok" required><span>Autorizo el tratamiento de mis datos según la <button class="linkb" type="button" data-legal="datos">política de datos</button> (Ley 1581 de 2012).</span></label>
+    <label class="chk"><input type="checkbox" name="ok" required><span>Autorizo el tratamiento de mis datos personales (Ley 1581 de 2012).</span></label>
+    <p style="margin:-.4rem 0 0;font-size:.85rem"><button class="linkb" type="button" data-legal="datos">Leer la política de datos</button></p>
     <button class="btn btn-a" type="submit"><svg class="ico"><use href="#i-wa"/></svg> Unirme por WhatsApp</button>
    </form>
    <div class="dash" style="margin-top:1.6rem">
     <p class="kicker" style="margin-top:0">Recomienda Expreso</p>
     <p style="margin:.2rem 0 .8rem;font-size:.92rem">Crea tu enlace personal y compártelo. Cuando alguien pida desde tu enlace sabremos que llegó por ti, para agradecértelo.</p>
     <form class="form" id="refForm" novalidate>
-     <label>Tu nombre<input name="ref" required maxlength="30" autocomplete="given-name"></label>
+     <label>Tu nombre<input type="text" name="ref" required maxlength="30" autocomplete="given-name"></label>
      <button class="btn btn-t" type="submit">Crear y compartir mi enlace</button>
     </form>
     <p id="refOut" class="muted" style="font-size:.85rem;word-break:break-all;margin:.6rem 0 0"></p>
@@ -593,6 +606,7 @@ dialog::backdrop{background:rgba(0,0,0,.55);backdrop-filter:blur(3px)}
  </div>
 </footer>
 
+<aside aria-label="Contacto rápido">
 <a class="wa" id="waFloat" href="#" target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp"><svg class="ico"><use href="#i-wa"/></svg><span>¿Hablamos?</span></a>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <div class="wash" id="waSheet" role="dialog" aria-label="Abrir WhatsApp" hidden><a class="btn btn-a" id="waSheetA" href="#" target="_blank" rel="noopener"><svg class="ico"><use href="#i-wa"/></svg> Abrir WhatsApp con tu mensaje</a><button class="btn btn-s" type="button" id="waSheetX">Cerrar</button></div>
@@ -605,9 +619,9 @@ dialog::backdrop{background:rgba(0,0,0,.55);backdrop-filter:blur(3px)}
   <div class="envbar" id="envBar"></div>
   <div class="tot" id="cartTot"></div>
   <form class="form" id="pedido" novalidate>
-   <label>Nombre<input name="nombre" required autocomplete="name" maxlength="60"></label>
-   <label>Ciudad<input name="ciudad" required autocomplete="address-level2" maxlength="60"></label>
-   <label>Dirección (opcional)<input name="dir" autocomplete="street-address" maxlength="120"></label>
+   <label>Nombre<input type="text" name="nombre" required autocomplete="name" maxlength="60"></label>
+   <label>Ciudad<input type="text" name="ciudad" required autocomplete="address-level2" maxlength="60"></label>
+   <label>Dirección (opcional)<input type="text" name="dir" autocomplete="address-line1" maxlength="120"></label>
    <label>Forma de pago<select name="pago" id="pagoSel"></select></label>
    <label class="chk"><input type="checkbox" name="mes"><span>Quiero recibirlo cada mes. Te escribimos antes de cada envío y puedes cancelar cuando quieras.</span></label>
   </form>
@@ -625,6 +639,7 @@ dialog::backdrop{background:rgba(0,0,0,.55);backdrop-filter:blur(3px)}
 </dialog>
 
 <button class="mini" id="miniCart" type="button"><span id="miniTxt">Ver pedido</span><span aria-hidden="true">→</span></button>
+</aside>
 
 <!-- Panel del vendedor (uso interno, se abre con #vendedor en la URL) -->
 <dialog class="modal" id="vendedor" aria-labelledby="vT">
@@ -640,6 +655,7 @@ dialog::backdrop{background:rgba(0,0,0,.55);backdrop-filter:blur(3px)}
    <label>Comisión de pago (%)<input name="com" type="number" min="0" max="100" step="0.1" inputmode="decimal"></label>
    <label>Publicidad por venta (CPA)<input name="cpa" type="number" min="0" step="100" inputmode="numeric"></label>
    <label>Pedidos entregados (%)<input name="ent" type="number" min="0" max="100" step="1" inputmode="numeric"></label>
+   <button class="btn btn-a btn-s" type="submit" style="align-self:end">Calcular</button>
   </form>
   <table class="vtab"><tbody id="vendOut"></tbody></table>
  </div>
@@ -812,6 +828,18 @@ const VIDEOS = [
 ];
 
 /* ---------- PREGUNTAS FRECUENTES ---------- */
+/* ---------- COMBOS: suman los productos al pedido de un toque (precio = suma, sin descuento) ---------- */
+const KITS = [
+  { id:'desayuno', nombre:'Combo Desayuno', items:['tinto','cereal'], desc:'Tu tinto de la mañana y un cereal de avena con espirulina.' },
+  { id:'diaynoche', nombre:'Combo Día y Noche', items:['latte','rooibos'], desc:'Latte para el día y rooibos sin cafeína para la noche.' },
+  { id:'antojo', nombre:'Combo Antojo', items:['mocha','schokolade'], desc:'Café con chocolate y un chocolate caliente sin café.' },
+  { id:'cabello', nombre:'Combo Cabello', items:['shampoo','acondicionador'], desc:'Shampoo y acondicionador Piel&Brillo.' }
+];
+
+/* ---------- SINÓNIMOS del buscador (palabra que escribe la gente → palabra del catálogo) ---------- */
+const SINONIMOS = { reishi:'ganoderma', lingzhi:'ganoderma', hongo:'ganoderma', hongos:'ganoderma', te:'infusion', aromatica:'infusion', pelo:'cabello',
+  dientes:'dental', pasta:'dental', jabon:'jabon', cafeina:'cafe', capuchino:'capuchino', cappuccino:'capuchino', expreso:'cafe', espresso:'cafe', cacao:'chocolate' };
+
 /* ---------- RECOMENDADOR "¿Cuál es para ti?": cada opción lleva a otro paso o a una lista de ids ---------- */
 const RECO = {
   inicio:  { q:'¿Cómo lo prefieres?', o:[['Café','cafe'], ['Sin café','sincafe'], ['En cápsulas',['capsulas','excellium','cordygold']], ['Para piel o cabello',['ganosoap','transparent','shampoo','acondicionador','exfoliante','fresh']]] },
@@ -915,9 +943,13 @@ function renderChips() {
   $$('#catBan .cban').forEach(b => b.setAttribute('aria-pressed', String(F.cat === b.dataset.cat)));
 }
 function filtrados() {
-  const q = norm(F.q.trim());
-  let r = PRODUCTOS.filter(p => (F.cat === 'todos' || p.cat === F.cat) &&
-    (!q || norm([p.nombre, p.linea, p.desc, p.tag, CATS[p.cat], ...(p.contiene || [])].join(' ')).includes(q)));
+  const words = norm(F.q).split(/[^a-z0-9ñ&']+/).filter(Boolean);
+  const hit = (hay, w) => { const t = SINONIMOS[w] || w; return hay.includes(t) || (t.length > 4 && hay.includes(t.replace(/e?s$/, ''))); };
+  let r = PRODUCTOS.filter(p => {
+    if (F.cat !== 'todos' && p.cat !== F.cat) return false;
+    const hay = norm([p.nombre, p.linea, p.desc, p.tag, CATS[p.cat], ...(p.contiene || [])].join(' '));
+    return words.every(w => hit(hay, w));
+  });
   const pv = (p, d) => typeof p.precio === 'number' ? p.precio : d;
   if (F.orden === 'asc') r = [...r].sort((a, b) => pv(a, Infinity) - pv(b, Infinity));
   else if (F.orden === 'desc') r = [...r].sort((a, b) => pv(b, -1) - pv(a, -1));
@@ -1079,6 +1111,26 @@ function answerQuiz(a) {
   $('[data-qn]').focus();
 }
 
+/* ---------- combos ---------- */
+function renderKits() {
+  const ks = KITS.map(k => ({ ...k, ps: k.items.map(id => BYID[id]).filter(vendible) })).filter(k => k.ps.length === k.items.length);
+  $('#kits').hidden = !ks.length;
+  $('#kits').innerHTML = '<p class="kits-t">Combos · todo en un toque</p>' + ks.map(k => `
+    <article class="kit">
+      <div class="kit-ims" aria-hidden="true">${k.ps.map(p => foto(p).replace(/alt="[^"]*"/, 'alt=""')).join('')}</div>
+      <h3>${esc(k.nombre)}</h3>
+      <p>${esc(k.desc)}</p>
+      <p><strong>Incluye:</strong> ${k.ps.map(p => esc(p.nombre)).join(' + ')}</p>
+      <div class="card-f"><span class="precio"><small>Total</small><b>${money(k.ps.reduce((a, p) => a + p.precio, 0))}</b></span>
+        <button class="btn btn-a btn-s" type="button" data-kit="${k.id}">Agregar combo</button></div>
+    </article>`).join('');
+}
+function addKit(id) {
+  const k = KITS.find(x => x.id === id); if (!k) return;
+  k.items.forEach(i => { if (vendible(BYID[i])) setQty(i, (cart[i] || 0) + 1); });
+  toast('Combo agregado: ' + k.nombre);
+}
+
 /* ---------- recomendador ---------- */
 let recoPaso = 'inicio';
 function renderReco(ids) {
@@ -1186,6 +1238,7 @@ function bind() {
     else if ('qr' in d) { qi = 0; qs = 0; renderQuiz(); }
     else if (d.legal) abrirLegal(d.legal);
     else if (d.ro) elegirReco(d.ro);
+    else if (d.kit) addKit(d.kit);
     else if (d.share) { const p = BYID[d.share]; compartir({ title:p.nombre + ' · Expreso', text:p.desc, url:baseURL() + '#p-' + p.id }); }
     else if ('temaCiclo' in d) cicloTema();
     if ('close' in d) { const dl = t.closest('dialog'); if (dl) dl.close(); }
@@ -1225,6 +1278,7 @@ function bind() {
   $('#waSheetX').addEventListener('click', () => { $('#waSheet').hidden = true; });
   $('#waSheetA').addEventListener('click', () => { setTimeout(() => { $('#waSheet').hidden = true; }, 300); });
   $('#vendForm').addEventListener('input', calcVendedor);
+  $('#vendForm').addEventListener('submit', e => { e.preventDefault(); calcVendedor(); });
   $('#ficha').addEventListener('close', () => { if (/^#p-/.test(location.hash)) try { history.replaceState(null, '', baseURL() + location.search); } catch (e) {} });
   window.addEventListener('hashchange', fichaDesdeHash);
   window.addEventListener('storage', e => { if (e.key === 'expreso.cart') { cart = store.get('expreso.cart', {}); cleanCart(); renderCart(); } });
@@ -1242,7 +1296,7 @@ function init() {
   $('#statN').textContent = PRODUCTOS.filter(vendible).length;
   $('#yr').textContent = new Date().getFullYear();
   renderChips(); renderGrid(); renderCart(); renderCiencia(); renderQuiz(); renderTV(); renderFAQ(); renderRedes(); jsonLD();
-  renderReco();
+  renderReco(); renderKits();
   bind(); reveal();
   fichaDesdeHash();
 }
