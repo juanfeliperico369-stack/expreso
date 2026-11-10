@@ -29,6 +29,8 @@
 | `assets/og.jpg` | Imagen de 1200×630 que aparece al compartir el enlace (WhatsApp, Facebook). |
 | `GUIA-NEGOCIO.md` | Estrategia y costos del negocio online. |
 | `docs/GUIONES-VIDEOS.md` | 10 guiones de video (gancho, desarrollo, cierre, enlace con UTM) y calendario de 2 semanas. |
+| `docs/WHATSAPP-PLANTILLAS.md` | Respuestas rápidas, etiquetas y secuencia de seguimiento de cada cliente (pedido → recompra → club → negocio). |
+| `tools/export_catalog.py` | Saca de `PRODUCTOS` el catálogo para Meta (Facebook, Instagram y WhatsApp) y los marketplaces: `export/*.csv` y `assets/catalogo/*.jpg` (800×800). `set_domain.py` lo corre solo. |
 | `docs/EVIDENCIA.md` | Resumen científico con referencias verificadas y reglas de publicidad honesta. |
 | `BITACORA.md` | Este archivo. |
 
@@ -191,3 +193,11 @@ Tarea de hoy: <...>
 3. `docs/GUIONES-VIDEOS.md`: 10 guiones conectados a la web (enlaces `#p-<id>` y `#seccion`, UTM por video), reglas de promesas de salud y de divulgación de IA, calendario y métricas.
 4. Pruebas nuevas: calculadora de cafeína (180 → 260 mg, límite de embarazo) y repetir pedido (ignora productos que no se venden o que no existen). Todas pasan.
 5. Se volvió a publicar la vista previa.
+
+### Sesión 8 · 2026-11-10 · v0.8 (vender fuera de la web)
+1. `tools/export_catalog.py`: lee `PRODUCTOS` y `CATS` del HTML (los evalúa con node en un contexto aislado) y genera `export/catalogo-meta.csv` (formato de Commerce Manager: id=SKU, precio "COP", enlace con UTM y `#p-id`, imagen) y `export/publicaciones.csv` (títulos de 60 caracteres o menos, sin cortar palabras, más descripción con aviso legal e INVIMA).
+2. Fotos para catálogos: `assets/catalogo/<id>.jpg`, 800×800 sobre el fondo crema de la web, recortando el borde transparente. Pesan 848 KB en total y se suben con la web porque Meta las descarga desde el dominio.
+3. `export/` está en `.gitignore` porque se regenera. `set_domain.py` ahora también corre el exportador con el dominio real.
+4. `docs/WHATSAPP-PLANTILLAS.md`: 11 respuestas rápidas (/confirmo, /pago, /recompra, /salud, /negocio…), 7 etiquetas, secuencia por días y reglas (Ley 1581, sin promesas, frecuencia).
+5. La web no cambió en esta sesión, así que la vista previa sigue igual.
+6. Cómo subir el catálogo a Meta: Commerce Manager → Catálogo → Fuentes de datos → subir `export/catalogo-meta.csv`, **después** de publicar la web con el dominio (las imágenes deben estar en línea). Las cápsulas pueden quedar rechazadas por las políticas de suplementos (ver la guía §8).

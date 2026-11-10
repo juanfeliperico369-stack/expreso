@@ -28,3 +28,6 @@ html.write_text(s, encoding='utf-8')
     '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
     f'  <url><loc>{d}/</loc><lastmod>{datetime.date.today().isoformat()}</lastmod></url>\n</urlset>\n', encoding='utf-8')
 print(f'Dominio configurado: {d}  (index.html, robots.txt, sitemap.xml)')
+# también regenera el catálogo para Meta / marketplaces con el dominio nuevo
+import subprocess
+subprocess.run([sys.executable, str(ROOT / 'tools' / 'export_catalog.py'), d], check=False)
