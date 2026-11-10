@@ -160,12 +160,26 @@ const ok = (cond, msg) => { console.log((cond ? '  ✔ ' : '  ✘ ') + msg); if 
   ok(await p3.locator('#kits .kit').count() === 4, 'combos: 4 visibles');
   await p3.click('[data-kit="desayuno"]');
   ok(Number(await p3.textContent('#cartN')) === k0 + 2, 'agregar combo suma sus 2 productos');
+  ok(/180 mg/.test(await p3.textContent('#cafRes')), 'calculadora de cafeína: ejemplo 2 cafés = 180 mg');
+  await p3.click('[data-cf="1"][data-cd="1"]');
+  ok((await p3.textContent('#cafTot')) === '260 mg', 'sumar un espresso = 260 mg');
+  await p3.check('#cafEmb');
+  ok(/de 200 mg/.test(await p3.textContent('#cafRes')) && await p3.locator('#cafRes .bar.over').count() === 1, 'embarazo: límite 200 mg y aviso de exceso');
   await p3.setViewportSize({ width: 1000, height: 800 });
   ok(await p3.evaluate(() => document.documentElement.scrollWidth) <= 1000, 'sin scroll horizontal a 1000px (menú de escritorio)');
   ok(await p3.locator('.art details').count() === 3, 'revista: 3 artículos');
   await p3.click('#a-cafeina summary');
   ok(/400 mg/.test(await p3.textContent('#a-cafeina details')) && await p3.isVisible('#a-cafeina details p'), 'artículo se despliega');
   await c3.close();
+
+  const c4 = await browser.newContext({ viewport: { width: 1280, height: 860 } });
+  await c4.addInitScript(() => { try { if (!sessionStorage.getItem('x')) { localStorage.setItem('expreso.ultimo', JSON.stringify({ mocha: 2, prensa: 1, nada: 3 })); sessionStorage.setItem('x', '1'); } } catch (e) {} });
+  const p4 = await c4.newPage(); watch(p4); await p4.goto(URL, { waitUntil: 'load' });
+  await p4.click('#cartBtn');
+  ok(await p4.isVisible('[data-repetir]'), 'carrito vacío ofrece "Repetir mi último pedido"');
+  await p4.click('[data-repetir]');
+  ok((await p4.textContent('#cartN')) === '2', 'repetir carga solo productos vendibles (2 × Mocha)');
+  await c4.close();
 
   // ---------- Móvil, todos los temas ----------
   console.log('Móvil 375px');

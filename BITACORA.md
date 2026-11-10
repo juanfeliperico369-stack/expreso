@@ -28,6 +28,7 @@
 | `_headers` | Cabeceras de seguridad y caché (Cloudflare Pages / Netlify las aplican solas). |
 | `assets/og.jpg` | Imagen de 1200×630 que aparece al compartir el enlace (WhatsApp, Facebook). |
 | `GUIA-NEGOCIO.md` | Estrategia y costos del negocio online. |
+| `docs/GUIONES-VIDEOS.md` | 10 guiones de video (gancho, desarrollo, cierre, enlace con UTM) y calendario de 2 semanas. |
 | `docs/EVIDENCIA.md` | Resumen científico con referencias verificadas y reglas de publicidad honesta. |
 | `BITACORA.md` | Este archivo. |
 
@@ -183,3 +184,10 @@ Tarea de hoy: <...>
 6. `package.json` (con axe-core como devDependency) y `.gitignore`. `npm test` ejecuta todo.
 7. Pruebas: todas pasan, incluida la de accesibilidad.
 8. Se volvió a publicar la vista previa en el mismo enlace.
+
+### Sesión 7 · 2026-11-10 · v0.7 (recompra + contenido)
+1. Calculadora de cafeína en la sección Ritual. Usa los valores de referencia de la EFSA (café filtrado 90 mg, espresso 80, té negro 50, cola 40, bebida energética 80, chocolate oscuro 25) y compara con el límite de 400 mg, o 200 mg en embarazo o lactancia. Arranca con un ejemplo de 2 cafés y sugiere el Rooibos si te pasas.
+2. "Repetir mi último pedido": al enviar un pedido se guarda en `expreso.ultimo`. Con el carrito vacío aparece el botón, que solo carga productos que se pueden vender. Es para fomentar la recompra.
+3. `docs/GUIONES-VIDEOS.md`: 10 guiones conectados a la web (enlaces `#p-<id>` y `#seccion`, UTM por video), reglas de promesas de salud y de divulgación de IA, calendario y métricas.
+4. Pruebas nuevas: calculadora de cafeína (180 → 260 mg, límite de embarazo) y repetir pedido (ignora productos que no se venden o que no existen). Todas pasan.
+5. Se volvió a publicar la vista previa.

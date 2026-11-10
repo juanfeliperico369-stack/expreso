@@ -337,6 +337,16 @@ dialog::backdrop{background:rgba(0,0,0,.55);backdrop-filter:blur(3px)}
 .kit .card-f{margin-top:auto}
 .kits-t{grid-column:1/-1;margin:0;font-size:.75rem;font-weight:800;letter-spacing:.25em;text-transform:uppercase;color:var(--muted)}
 
+.caf{margin-top:2rem}
+.caf h3{margin:0 0 .2rem;font:400 2rem/1 var(--fd);letter-spacing:.02em;color:var(--brand)}
+.caf-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:.4rem .8rem;align-items:center;padding:.35rem 0;border-bottom:1px solid color-mix(in srgb,var(--line) 20%,transparent);font-size:.92rem}
+.caf-row small{color:var(--muted);font-variant-numeric:tabular-nums}
+.caf-tot{margin:1rem 0 .2rem;font-size:1rem}
+.caf-tot b{font:400 2.4rem/1 var(--fd);color:var(--brand);font-variant-numeric:tabular-nums}
+.bar.over i{background:var(--accent)}
+.caf .chk{display:flex;gap:.6rem;align-items:center;margin-top:.8rem;font-size:.9rem;cursor:pointer}
+.caf .chk input{width:22px;height:22px;accent-color:var(--brand)}
+
 /* ============ ANIMACIÓN ============ */
 .js .rv{transform:translateY(16px);transition:transform .7s ease}
 .js .rv.in{opacity:1;transform:none}
@@ -491,6 +501,8 @@ dialog::backdrop{background:rgba(0,0,0,.55);backdrop-filter:blur(3px)}
    <div class="step rv"><h3>Agua caliente</h3><p>Agrega 150 a 200 ml de agua caliente, no hirviendo. Para los sin azúcar, endulza a tu gusto.</p></div>
    <div class="step rv"><h3>Disfruta</h3><p>Revuelve y tómatelo con calma. Adultos: hasta unos 400 mg de cafeína al día, sumando todas tus bebidas.</p></div>
   </div>
+  <div class="dash caf rv" id="caf" aria-live="polite"></div>
+
   <p class="kicker">Expreso TV · videos cortos que explican sin rodeos</p>
   <div class="tv" id="tv"></div>
 
@@ -1045,7 +1057,8 @@ function renderCart() {
       <div><b>${esc(p.nombre)}</b><small>${money(p.precio)} c/u</small></div>
       <span class="qty"><button type="button" data-q="${id}" data-d="-1" aria-label="Quitar uno de ${esc(p.nombre)}">−</button><output>${cart[id]}</output><button type="button" data-q="${id}" data-d="1" aria-label="Agregar uno de ${esc(p.nombre)}">+</button></span>
     </div>`; }).join('')
-    : '<p class="empty">Tu pedido está vacío. <a href="#catalogo" data-close>Ver catálogo</a></p>';
+    : '<p class="empty">Tu pedido está vacío. <a href="#catalogo" data-close>Ver catálogo</a></p>' +
+      (ultimoValido() ? '<p style="text-align:center"><button class="btn btn-t btn-s" type="button" data-repetir>Repetir mi último pedido</button></p>' : '');
   $('#cartTot').innerHTML = ids.length ? `
     <div><span>Subtotal</span><b id="subT">${money(t.sub)}</b></div>
     <div><span>Envío</span><span>${t.env == null ? 'Se confirma según tu ciudad' : (t.env === 0 ? 'Gratis' : money(t.env))}</span></div>
@@ -1109,6 +1122,37 @@ function answerQuiz(a) {
     ${m.url ? `<a href="${esc(m.url)}" target="_blank" rel="noopener">Fuente ↗</a>` : ''}</p>
     <button class="btn btn-a btn-s" type="button" data-qn>${qi + 1 < MITOS.length ? 'Siguiente' : 'Ver resultado'}</button>`;
   $('[data-qn]').focus();
+}
+
+/* ---------- calculadora de cafeína (valores de referencia EFSA) ---------- */
+const CAFEINA = [['Taza de café filtrado (200 ml)', 90], ['Espresso (60 ml)', 80], ['Taza de té negro (220 ml)', 50],
+  ['Lata de gaseosa cola (355 ml)', 40], ['Lata de bebida energética (250 ml)', 80], ['Chocolatina oscura (50 g)', 25]];
+const cafQ = CAFEINA.map((_, i) => (i === 0 ? 2 : 0)); // ejemplo inicial: 2 tazas de café
+function renderCaf() {
+  $('#caf').innerHTML = `<h3>Calculadora de cafeína</h3>
+    <p class="muted" style="margin:0 0 .6rem;font-size:.88rem">Suma lo que tomas en un día. Para los cafés Gano, revisa la cantidad que indica la etiqueta.</p>
+    ${CAFEINA.map(([n, mg], i) => `<div class="caf-row"><span>${esc(n)}</span><small>${mg} mg</small>
+      <span class="qty"><button type="button" data-cf="${i}" data-cd="-1" aria-label="Quitar ${esc(n)}">−</button><output id="cafq${i}">${cafQ[i]}</output><button type="button" data-cf="${i}" data-cd="1" aria-label="Agregar ${esc(n)}">+</button></span></div>`).join('')}
+    <label class="chk"><input type="checkbox" id="cafEmb"> Estoy en embarazo o lactancia</label>
+    <div id="cafRes"></div>
+    <p style="margin:.6rem 0 0;font-size:.8rem"><a href="https://doi.org/10.2903/j.efsa.2015.4102" target="_blank" rel="noopener">Fuente: EFSA 2015 ↗</a> · Orientativo, no reemplaza el consejo médico.</p>`;
+  $('#cafEmb').addEventListener('change', cafResumen);
+  cafResumen();
+}
+function cafPaso(i, d) { if (!(i in cafQ)) return; cafQ[i] = Math.max(0, Math.min(20, cafQ[i] + d)); $('#cafq' + i).textContent = cafQ[i]; cafResumen(); }
+function cafResumen() {
+  const tot = CAFEINA.reduce((a, [, mg], i) => a + mg * cafQ[i], 0), lim = $('#cafEmb').checked ? 200 : 400, over = tot > lim;
+  $('#cafRes').innerHTML = `<p class="caf-tot"><b id="cafTot">${tot} mg</b> de ${lim} mg al día</p>
+    <div class="bar${over ? ' over' : ''}"><i style="width:${Math.min(100, Math.round(tot / lim * 100))}%"></i></div>
+    <p style="margin:.5rem 0 0;font-size:.9rem">${over ? '<strong>Te pasas del límite de referencia.</strong> Prueba pasar alguna taza al Rooibos, que no tiene cafeína.' : 'Vas dentro del límite de referencia para adultos sanos.'}</p>`;
+}
+
+/* ---------- repetir último pedido ---------- */
+function ultimoValido() { const u = store.get('expreso.ultimo', null); return u && typeof u === 'object' && Object.keys(u).some(id => vendible(BYID[id]) && Number(u[id]) > 0) ? u : null; }
+function repetirUltimo() {
+  const u = ultimoValido(); if (!u) return;
+  for (const id in u) if (vendible(BYID[id])) cart[id] = Math.floor(Number(u[id])) || 0;
+  cleanCart(); store.set('expreso.cart', cart); renderCart(); toast('Listo: cargamos tu último pedido');
 }
 
 /* ---------- combos ---------- */
@@ -1239,6 +1283,8 @@ function bind() {
     else if (d.legal) abrirLegal(d.legal);
     else if (d.ro) elegirReco(d.ro);
     else if (d.kit) addKit(d.kit);
+    else if ('repetir' in d) repetirUltimo();
+    else if (d.cf) cafPaso(Number(d.cf), Number(d.cd));
     else if (d.share) { const p = BYID[d.share]; compartir({ title:p.nombre + ' · Expreso', text:p.desc, url:baseURL() + '#p-' + p.id }); }
     else if ('temaCiclo' in d) cicloTema();
     if ('close' in d) { const dl = t.closest('dialog'); if (dl) dl.close(); }
@@ -1258,6 +1304,7 @@ function bind() {
     const data = Object.fromEntries(new FormData(f));
     for (const k in data) data[k] = String(data[k]).trim();
     store.set('expreso.cliente', { nombre:data.nombre, ciudad:data.ciudad });
+    store.set('expreso.ultimo', { ...cart });
     openWA(mensajePedido(data));
   });
   $('#clubForm').addEventListener('submit', e => {
@@ -1296,7 +1343,7 @@ function init() {
   $('#statN').textContent = PRODUCTOS.filter(vendible).length;
   $('#yr').textContent = new Date().getFullYear();
   renderChips(); renderGrid(); renderCart(); renderCiencia(); renderQuiz(); renderTV(); renderFAQ(); renderRedes(); jsonLD();
-  renderReco(); renderKits();
+  renderReco(); renderKits(); renderCaf();
   bind(); reveal();
   fichaDesdeHash();
 }
