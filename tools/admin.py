@@ -13,6 +13,8 @@
   python3 tools/admin.py ga4 G-ABC123XYZ | off          # Google Analytics 4
   python3 tools/admin.py pixel 123456789012345 | off    # Meta Pixel
   python3 tools/admin.py red Instagram https://instagram.com/expreso.co
+  python3 tools/admin.py vendedor "Juan Felipe" "Medellín" "Te ayudo a elegir tu café"
+  python3 tools/admin.py estado                          # qué falta para lanzar
 
 Después de cambiar algo: node tools/test_site.js  (y publica la web).
 """
@@ -75,6 +77,24 @@ elif cmd in ('ga4', 'pixel') and len(a) == 2:
     val = '' if a[1] == 'off' else a[1]
     if val and not re.fullmatch(ok, val): salir('ID con formato inválido (GA4: G-XXXXXXX · Pixel: solo números)')
     s = sub1(key + r": '[^']*'", f"{key}: '{val}'", s, 'CONFIG.analitica.' + key)
+elif cmd == 'vendedor' and len(a) in (3, 4):
+    q = lambda v: json.dumps(v.strip()[:80], ensure_ascii=False)
+    s = sub1(r"  vendedor: \{[^\n]*?\},", f"  vendedor: {{ nombre: {q(a[1])}, ciudad: {q(a[2])}, frase: {q(a[3] if len(a) == 4 else '')} }},", s, 'CONFIG.vendedor')
+elif cmd == 'estado':
+    chk = lambda okv, txt: print(('  ✔ ' if okv else '  ☐ ') + txt)
+    print('Lista de lanzamiento de Expreso\n— En el código —')
+    chk(re.search(r"whatsapp: '57\d{10}'", s), 'Número de WhatsApp        → python3 tools/admin.py whatsapp 57XXXXXXXXXX')
+    chk('<link rel="canonical"' in s, 'Dominio configurado       → python3 tools/set_domain.py https://tu-dominio.com')
+    chk(re.search(r"vendedor: \{ nombre: ['\"][^'\"]+", s), 'Quién atiende (nombre)    → python3 tools/admin.py vendedor "Nombre" "Ciudad"')
+    chk(re.search(r"(Instagram|TikTok|YouTube|Facebook): 'https://", s), 'Al menos una red social   → python3 tools/admin.py red Instagram https://…')
+    chk(re.search(r"ga4: 'G-|metaPixel: '\d", s), 'Analítica (GA4 o Pixel)   → python3 tools/admin.py ga4 G-… / pixel …')
+    chk(re.search(r"  envio: \d+", s), 'Costo de envío definido   → python3 tools/admin.py envio 12000 (opcional)')
+    print("  · Productos agotados ahora:", s.count("estado:'agotado'"))
+    print('— Fuera del código (márcalos tú) —')
+    for t in ['Permiso de uso de las fotos del catálogo', 'Códigos INVIMA verificados en invima.gov.co', 'Política de distribuidores de Gano Excel por escrito (marketplaces, precios, marca)',
+              'Margen real por producto confirmado (usa #vendedor)', 'RUT / DIAN al día (ver GUIA §3)', 'WhatsApp Business con catálogo, etiquetas y respuestas rápidas (docs/WHATSAPP-PLANTILLAS.md)']:
+        print('  ☐ ' + t)
+    sys.exit(0)
 elif cmd == 'red' and len(a) == 3:
     if a[1] not in ('Instagram', 'TikTok', 'YouTube', 'Facebook'): salir('Red: Instagram, TikTok, YouTube o Facebook')
     if not re.fullmatch(r'https://[^\s\'"<>]+', a[2]): salir('La URL debe empezar por https://')

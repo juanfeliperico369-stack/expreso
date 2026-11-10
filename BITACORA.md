@@ -27,6 +27,7 @@
 | `tools/set_domain.py` | `python3 tools/set_domain.py https://tu-dominio.com` llena canonical/og:image en `index.html` y crea `robots.txt` + `sitemap.xml`. |
 | `_headers` | Cabeceras de seguridad y caché (Cloudflare Pages / Netlify las aplican solas). |
 | `assets/og.jpg` | Imagen de 1200×630 que aparece al compartir el enlace (WhatsApp, Facebook). |
+| `PLAN-DE-ACCION.md` | **Empieza aquí si eres el dueño.** Cómo funciona cada modalidad (reventa, dropshipping, referidos, contenido y red de Gano Excel con su plan GEN 5, binario y recompra explicados), cómo usar las herramientas, el plan por etapas, las metas para entrar al multinivel, la rutina y el presupuesto. |
 | `GUIA-NEGOCIO.md` | Estrategia y costos del negocio online. |
 | `docs/GUIONES-VIDEOS.md` | 10 guiones de video (gancho, desarrollo, cierre, enlace con UTM) y calendario de 2 semanas. |
 | `docs/WHATSAPP-PLANTILLAS.md` | Respuestas rápidas, etiquetas y secuencia de seguimiento de cada cliente (pedido → recompra → club → negocio). |
@@ -221,3 +222,14 @@ Tarea de hoy: <...>
 4. Se probó `admin.py` en una copia con todos los comandos y sus errores, y luego se cargó esa copia en el navegador: 21 productos, promo visible, banner visible, Mocha agotado y 0 errores.
 5. 5 pruebas nuevas de analítica (sin IDs no hay nada; con IDs no carga antes de aceptar; carga al aceptar; eventos con SKU; se puede reabrir la preferencia). Todas pasan.
 6. Se volvió a publicar la vista previa. Las IDs siguen vacías, así que no hay banner.
+
+### Sesión 11 · 2026-11-10 · v1.1 (confianza + plan)
+1. Bloque "Te atiende" en la sección Club (`CONFIG.vendedor`: nombre, ciudad y frase, con iniciales en círculo). Si no hay nombre, no se muestra.
+2. `admin.py vendedor "Nombre" "Ciudad" ["frase"]` y `admin.py estado`, que es la lista de lanzamiento: 6 revisiones en el código (WhatsApp, dominio, vendedor, redes, analítica, envío), el conteo de agotados y 6 pendientes fuera del código.
+3. `PLAN-DE-ACCION.md`: las modalidades de negocio y el plan de compensación del volante, explicado con las cuentas verificadas:
+   - GEN 5: % del paquete por generación (ESP 3: $675.000 / $90.000 / $180.000; el ejemplo supone 62 personas y $279 M en paquetes).
+   - Binario: parejas izquierda/derecha y % temporales.
+   - Recompra: 15 % × 56 CV ≈ $37.800 por pareja.
+   - Además: lectura honesta del plan, plan por etapas (semana 0 → meses 4 a 6), metas para pasar a la red, rutina y presupuesto.
+4. Pruebas nuevas del bloque "Te atiende". `admin.py` se probó en una copia (vendedor, estado) y esa copia se cargó en el navegador sin errores. Todas las pruebas pasan.
+5. Se volvió a publicar la vista previa.

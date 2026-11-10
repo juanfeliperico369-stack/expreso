@@ -356,6 +356,12 @@ dialog::backdrop{background:rgba(0,0,0,.55);backdrop-filter:blur(3px)}
 .cookies p{margin:0;max-width:60ch}
 .bts2{display:flex;gap:.5rem}
 
+.who{display:grid;grid-template-columns:64px 1fr;gap:.2rem 1rem;align-items:center;margin:0 0 1.6rem;padding:1rem;border:3px solid var(--line);background:var(--paper)}
+.who i{grid-row:span 3;display:grid;place-items:center;width:64px;height:64px;border-radius:50%;background:var(--brand);color:var(--onBrand);font:400 1.9rem/1 var(--fd);font-style:normal}
+.who b{font:400 1.6rem/1 var(--fd);letter-spacing:.03em;color:var(--brand)}
+.who small{color:var(--muted)}
+.who p{margin:0;font:italic 400 .92rem/1.45 var(--fserif)}
+
 /* ============ ANIMACIÓN ============ */
 .js .rv{transform:translateY(16px);transition:transform .7s ease}
 .js .rv.in{opacity:1;transform:none}
@@ -577,6 +583,7 @@ dialog::backdrop{background:rgba(0,0,0,.55);backdrop-filter:blur(3px)}
 <section class="sec" id="comunidad">
  <div class="wrap two" style="align-items:start">
   <div class="rv">
+   <div class="who" id="who" hidden></div>
    <header class="sh"><p class="sh-n">Club</p><h2 class="sh-t">Expreso</h2></header>
    <p>Recetas, novedades, descuentos y respuestas directas. Déjanos tus datos y seguimos la conversación por WhatsApp.</p>
    <form class="form" id="clubForm" novalidate>
@@ -705,6 +712,7 @@ const CONFIG = {
   envioGratisDesde: null,            // ej. 300000, o null para desactivar
   promo: null,                       // ej. { texto:'Envío gratis desde $300.000', hasta:'2026-12-31' } — se oculta sola al vencer
   analitica: { ga4: '', metaPixel: '' }, // ej. ga4:'G-ABC123XYZ', metaPixel:'123456789012345'. Vacío = sin cookies ni banner
+  vendedor: { nombre: '', ciudad: '', frase: '' }, // quién atiende: aparece en la sección Club (vacío = no se muestra)
   tiempoEnvio: '2 a 5 días hábiles según la ciudad', // VERIFICAR con la transportadora
   pagos: ['Nequi', 'Daviplata', 'Transferencia Bancolombia', 'Link de pago (tarjeta / PSE)', 'Contraentrega (según ciudad)'],
   redes: { Instagram: '', TikTok: '', YouTube: '', Facebook: '' }, // pega aquí las URL cuando existan
@@ -1227,6 +1235,14 @@ function evPedido() {
     meta:{ currency:'COP', value:t.sub, content_ids:ids.map(id => BYID[id].sku), num_items:t.n, content_type:'product' } };
 }
 
+/* ---------- quién te atiende (CONFIG.vendedor) ---------- */
+function renderWho() {
+  const v = CONFIG.vendedor || {}, el = $('#who'), n = String(v.nombre || '').trim();
+  el.hidden = !n; if (!n) return;
+  const ini = n.split(/\s+/).slice(0, 2).map(x => x[0]).join('').toUpperCase();
+  el.innerHTML = `<i aria-hidden="true">${esc(ini)}</i><small>Te atiende</small><b>${esc(n)}</b><small>${v.ciudad ? esc(v.ciudad) + ' · ' : ''}Distribuidor independiente</small>${v.frase ? `<p style="grid-column:1/-1;margin-top:.6rem">“${esc(v.frase)}”</p>` : ''}`;
+}
+
 /* ---------- combos ---------- */
 function renderKits() {
   const ks = KITS.map(k => ({ ...k, ps: k.items.map(id => BYID[id]).filter(vendible) })).filter(k => k.ps.length === k.items.length);
@@ -1417,12 +1433,12 @@ function init() {
   $('#statN').textContent = PRODUCTOS.filter(vendible).length;
   $('#yr').textContent = new Date().getFullYear();
   renderChips(); renderGrid(); renderCart(); renderCiencia(); renderQuiz(); renderTV(); renderFAQ(); renderRedes(); jsonLD();
-  renderReco(); renderKits(); renderCaf(); renderPromo(); recordarCarrito(); consentimiento();
+  renderReco(); renderKits(); renderCaf(); renderPromo(); renderWho(); recordarCarrito(); consentimiento();
   bind(); reveal();
   fichaDesdeHash();
 }
 /* acceso de solo lectura para herramientas y pruebas (los datos ya son públicos en este archivo) */
-window.EXPRESO = { CONFIG, PRODUCTOS, KITS, consentimiento, rerender() { cleanCart(); renderPromo(); renderChips(); renderGrid(); renderKits(); renderCart(); } };
+window.EXPRESO = { CONFIG, PRODUCTOS, KITS, consentimiento, rerender() { cleanCart(); renderPromo(); renderWho(); renderChips(); renderGrid(); renderKits(); renderCart(); } };
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
 </script>

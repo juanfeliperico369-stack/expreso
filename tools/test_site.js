@@ -192,6 +192,9 @@ const ok = (cond, msg) => { console.log((cond ? '  ✔ ' : '  ✘ ') + msg); if 
   ok(await p5.locator('[data-open="latte"] .card-tag', { hasText: 'Agotado' }).count() === 1 && await p5.locator('[data-add="latte"]').count() === 0, 'producto agotado: etiqueta y sin botón Agregar');
   ok((await p5.textContent('#cartN')) === '0' || (await p5.isHidden('#cartN')), 'agotado sale del carrito');
   ok(await p5.locator('#kits [data-kit="diaynoche"]').count() === 0, 'combo con producto agotado se oculta');
+  ok(!(await p5.isVisible('#who')), 'sin vendedor configurado no aparece "Te atiende"');
+  await p5.evaluate(() => { window.EXPRESO.CONFIG.vendedor = { nombre: 'Juan Pérez', ciudad: 'Medellín', frase: 'Te ayudo a elegir.' }; window.EXPRESO.rerender(); });
+  ok(/JP/.test(await p5.textContent('#who i')) && /Juan Pérez/.test(await p5.textContent('#who')) && /Medellín/.test(await p5.textContent('#who')), 'bloque "Te atiende" con iniciales, nombre y ciudad');
   await p5.evaluate(() => { window.EXPRESO.CONFIG.promo = { texto: 'Vieja', hasta: '2020-01-01' }; window.EXPRESO.rerender(); });
   ok(!(await p5.isVisible('#promo')), 'promo vencida se oculta sola');
   await c5.close();
