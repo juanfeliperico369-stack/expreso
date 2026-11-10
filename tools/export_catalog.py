@@ -64,7 +64,7 @@ with open(ROOT / 'export' / 'catalogo-meta.csv', 'w', newline='', encoding='utf-
     w = csv.writer(f)
     w.writerow(['id', 'title', 'description', 'availability', 'condition', 'price', 'link', 'image_link', 'brand', 'product_type'])
     for p in vendibles:
-        w.writerow([sku(p), titulo(p), descripcion(p)[:5000], 'in stock', 'new', f"{p['precio']} COP",
+        w.writerow([sku(p), titulo(p), descripcion(p)[:5000], 'out of stock' if p.get('estado') == 'agotado' else 'in stock', 'new', f"{p['precio']} COP",
                     f"{dominio}/?utm_source=meta&utm_campaign=catalogo#p-{p['id']}", f"{dominio}/assets/catalogo/{p['id']}.jpg",
                     'Gano Excel', cats.get(p['cat'], p['cat'])])
 with open(ROOT / 'export' / 'publicaciones.csv', 'w', newline='', encoding='utf-8') as f:

@@ -181,6 +181,21 @@ const ok = (cond, msg) => { console.log((cond ? '  ✔ ' : '  ✘ ') + msg); if 
   ok((await p4.textContent('#cartN')) === '2', 'repetir carga solo productos vendibles (2 × Mocha)');
   await c4.close();
 
+  console.log('Operación: agotado, promo, recordatorio');
+  const c5 = await browser.newContext({ viewport: { width: 1280, height: 860 } });
+  await c5.addInitScript(() => { try { if (!sessionStorage.getItem('y')) { localStorage.setItem('expreso.cart', JSON.stringify({ latte: 2 })); localStorage.setItem('expreso.visto', JSON.stringify(Date.now() - 48 * 3600e3)); sessionStorage.setItem('y', '1'); } } catch (e) {} });
+  const p5 = await c5.newPage(); watch(p5); await p5.goto(URL, { waitUntil: 'load' }); await p5.waitForTimeout(1200);
+  ok(/Tu pedido te espera: 2 productos/.test(await p5.textContent('#toast')), 'recordatorio de carrito al volver después de 48 h');
+  ok(!(await p5.isVisible('#promo')), 'sin promo configurada no se muestra la franja');
+  await p5.evaluate(() => { const E = window.EXPRESO; E.PRODUCTOS.find(p => p.id === 'latte').estado = 'agotado'; E.CONFIG.promo = { texto: 'Envío gratis esta semana', hasta: '2099-12-31' }; E.rerender(); });
+  ok(/Envío gratis esta semana/.test(await p5.textContent('#promo')) && await p5.isVisible('#promo'), 'promo vigente visible');
+  ok(await p5.locator('[data-open="latte"] .card-tag', { hasText: 'Agotado' }).count() === 1 && await p5.locator('[data-add="latte"]').count() === 0, 'producto agotado: etiqueta y sin botón Agregar');
+  ok((await p5.textContent('#cartN')) === '0' || (await p5.isHidden('#cartN')), 'agotado sale del carrito');
+  ok(await p5.locator('#kits [data-kit="diaynoche"]').count() === 0, 'combo con producto agotado se oculta');
+  await p5.evaluate(() => { window.EXPRESO.CONFIG.promo = { texto: 'Vieja', hasta: '2020-01-01' }; window.EXPRESO.rerender(); });
+  ok(!(await p5.isVisible('#promo')), 'promo vencida se oculta sola');
+  await c5.close();
+
   // ---------- Móvil, todos los temas ----------
   console.log('Móvil 375px');
   for (const tema of ['revista', 'cafe', 'bosque', 'contraste']) {

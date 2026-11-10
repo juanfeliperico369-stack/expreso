@@ -65,6 +65,8 @@
 5. **`VIDEOS`**: pega la URL de cada video de TikTok, Reels o YouTube en `url` y la tarjeta cambia de "Pronto" a "Ver".
 6. **`FAQ`** y **`LEGAL`**: textos de preguntas frecuentes, política de datos y retracto.
 7. **Después de editar**, corre `node tools/test_site.js`. Debe terminar en "Todas las pruebas pasaron".
+11. **Producto agotado:** pon `estado:'agotado'` en el producto. Se muestra la etiqueta "Agotado" y el botón "Avísame" (WhatsApp con su SKU), sale del carrito, sus combos se ocultan y en el catálogo de Meta queda como `out of stock`. Para volver a venderlo, borra esa línea.
+12. **Promo:** `CONFIG.promo = { texto:'…', hasta:'AAAA-MM-DD' }` muestra una franja roja bajo la cabecera y se oculta sola al vencer. `null` = sin promo.
 9. **`KITS`**: combos (`id`, `nombre`, `items[]`, `desc`). El total es la suma de los productos y "Agregar combo" los suma al carrito. No tiene descuento porque el carrito es por producto. Si algún día quieres descuento, hay que guardar el combo como una línea propia del carrito.
 10. **`SINONIMOS`**: palabras que la gente escribe y la del catálogo a la que equivalen (reishi→ganoderma, pelo→cabello, té→infusión…). El buscador exige que aparezcan todas las palabras.
 8. **`RECO`**: el árbol del recomendador "¿Cuál es para ti?". Cada opción lleva a otro paso (texto) o a una lista de ids de productos.
@@ -201,3 +203,11 @@ Tarea de hoy: <...>
 4. `docs/WHATSAPP-PLANTILLAS.md`: 11 respuestas rápidas (/confirmo, /pago, /recompra, /salud, /negocio…), 7 etiquetas, secuencia por días y reglas (Ley 1581, sin promesas, frecuencia).
 5. La web no cambió en esta sesión, así que la vista previa sigue igual.
 6. Cómo subir el catálogo a Meta: Commerce Manager → Catálogo → Fuentes de datos → subir `export/catalogo-meta.csv`, **después** de publicar la web con el dominio (las imágenes deben estar en línea). Las cápsulas pueden quedar rechazadas por las políticas de suplementos (ver la guía §8).
+
+### Sesión 9 · 2026-11-10 · v0.9 (operación diaria)
+1. Estado `agotado` en productos: etiqueta, "Avísame cuando esté disponible", sale del carrito y de los combos, y queda `out of stock` en el exportador de Meta.
+2. `CONFIG.promo` con fecha de vencimiento: franja de promoción configurable, sin tocar el código.
+3. Recordatorio de carrito: si el cliente vuelve después de más de 12 h y tiene productos en el pedido, aparece el aviso "Tu pedido te espera: N productos" y el ícono del carrito late 3 veces.
+4. `window.EXPRESO` (CONFIG, PRODUCTOS, KITS, `rerender()`): acceso para herramientas y pruebas. No expone nada privado, porque los datos ya están en el HTML.
+5. 7 pruebas nuevas (recordatorio a las 48 h, promo vigente y vencida, agotado, combo oculto). Todas pasan.
+6. Se volvió a publicar la vista previa.

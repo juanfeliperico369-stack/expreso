@@ -347,6 +347,11 @@ dialog::backdrop{background:rgba(0,0,0,.55);backdrop-filter:blur(3px)}
 .caf .chk{display:flex;gap:.6rem;align-items:center;margin-top:.8rem;font-size:.9rem;cursor:pointer}
 .caf .chk input{width:22px;height:22px;accent-color:var(--brand)}
 
+.promo{background:var(--accent);color:#fff;text-align:center;font-weight:700;font-size:.85rem;letter-spacing:.06em;padding:.6rem max(16px,env(safe-area-inset-right,0px)) .6rem max(16px,env(safe-area-inset-left,0px))}
+[data-theme=contraste] .promo{color:#000}
+@keyframes pulso{50%{transform:scale(1.18)}}
+.cart-b.pulso{animation:pulso .5s ease 3}
+
 /* ============ ANIMACIÓN ============ */
 .js .rv{transform:translateY(16px);transition:transform .7s ease}
 .js .rv.in{opacity:1;transform:none}
@@ -370,6 +375,7 @@ dialog::backdrop{background:rgba(0,0,0,.55);backdrop-filter:blur(3px)}
 
 <header>
  <div class="band" aria-hidden="true"><span class="b1">Expreso</span><span class="b2">Envíos a toda Colombia</span></div>
+ <div class="promo" id="promo" role="note" hidden></div>
  <nav class="nav" aria-label="Principal">
   <div class="wrap">
    <a class="logo" href="#inicio" aria-label="Expreso, inicio"><svg class="ico" style="color:var(--brand)"><use href="#i-cup"/></svg><b>Expreso</b></a>
@@ -692,6 +698,7 @@ const CONFIG = {
   whatsapp: '',                      // REEMPLAZAR: 57 + celular, sin espacios ni '+', ej. '573001234567'. Vacío = el cliente elige el chat
   envio: null,                       // número en COP (ej. 12000) o null = "se confirma según ciudad"
   envioGratisDesde: null,            // ej. 300000, o null para desactivar
+  promo: null,                       // ej. { texto:'Envío gratis desde $300.000', hasta:'2026-12-31' } — se oculta sola al vencer
   tiempoEnvio: '2 a 5 días hábiles según la ciudad', // VERIFICAR con la transportadora
   pagos: ['Nequi', 'Daviplata', 'Transferencia Bancolombia', 'Link de pago (tarjeta / PSE)', 'Contraentrega (según ciudad)'],
   redes: { Instagram: '', TikTok: '', YouTube: '', Facebook: '' }, // pega aquí las URL cuando existan
@@ -883,9 +890,10 @@ const store = {
 };
 PRODUCTOS.forEach(p => { p.proveedor = PROVEEDORES[p.proveedor] ? p.proveedor : 'gano'; if (!p.sku) p.sku = PROVEEDORES[p.proveedor].sku + '-' + p.id.toUpperCase(); });
 const BYID = Object.fromEntries(PRODUCTOS.map(p => [p.id, p]));
-const vendible = p => p && p.estado !== 'proximamente' && typeof p.precio === 'number';
+const vendible = p => p && p.estado !== 'proximamente' && p.estado !== 'agotado' && typeof p.precio === 'number';
+const tagTxt = p => p.estado === 'agotado' ? 'Agotado' : p.tag;
 const precioTxt = p => typeof p.precio === 'number' ? money(p.precio) : 'Por confirmar';
-const avisame = p => waURL('Hola Expreso, avísenme cuando llegue: ' + p.nombre + ' [' + p.sku + '].');
+const avisame = p => waURL('Hola Expreso, avísenme cuando ' + (p.estado === 'agotado' ? 'vuelva a haber' : 'llegue') + ': ' + p.nombre + ' [' + p.sku + '].');
 const foto = (p, cls = '') => IM['p-' + p.id] ? `<img src="${IM['p-' + p.id]}" alt="${esc(p.nombre)}" width="220" height="220"${cls}>` : `<svg class="ico ph-ico" role="img" aria-label="${esc(p.nombre)}"><use href="#i-cup"/></svg>`;
 const BLANK = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
 let IM = {};
@@ -974,7 +982,7 @@ function renderGrid() {
   $('#grid').innerHTML = r.length ? r.map(p => `
     <article class="card${vendible(p) ? '' : ' soon'}">
       <button class="card-img" type="button" data-open="${p.id}" aria-label="Ver detalles de ${esc(p.nombre)}">
-        ${p.tag ? `<span class="card-tag${vendible(p) ? '' : ' soon'}">${esc(p.tag)}</span>` : ''}
+        ${tagTxt(p) ? `<span class="card-tag${vendible(p) ? '' : ' soon'}">${esc(tagTxt(p))}</span>` : ''}
         ${foto(p)}
       </button>
       <div class="card-b">
@@ -1010,7 +1018,7 @@ function abrirFicha(id) {
       <div class="mrow">${vendible(p) ? `
         <span class="qty"><button type="button" data-fq="-1" aria-label="Menos">−</button><output id="fq">1</output><button type="button" data-fq="1" aria-label="Más">+</button></span>
         <button class="btn btn-a" type="button" data-addf="${p.id}">Agregar al pedido</button>`
-        : `<a class="btn btn-a" href="${esc(avisame(p))}" target="_blank" rel="noopener">Avísame cuando llegue</a>`}
+        : `<a class="btn btn-a" href="${esc(avisame(p))}" target="_blank" rel="noopener">Avísame cuando esté disponible</a>`}
       </div>
       <p><a class="btn btn-s" style="margin-top:.8rem" href="${esc(waURL('Hola Expreso, tengo una pregunta sobre ' + p.nombre + '.'))}" target="_blank" rel="noopener"><svg class="ico"><use href="#i-wa"/></svg> Preguntar</a> <button class="btn btn-s" style="margin-top:.8rem" type="button" data-share="${p.id}">Compartir</button></p>
       <p class="inv">Ref. ${esc(p.sku)}. ${p.invima ? 'Registro / notificación sanitaria INVIMA: ' + esc(p.invima) + '. ' : ''}${{ cuidado:'Producto cosmético.', accesorios:'' }[p.cat] ?? 'Suplemento dietario / alimento. No es un medicamento.'}</p>
@@ -1153,6 +1161,23 @@ function repetirUltimo() {
   const u = ultimoValido(); if (!u) return;
   for (const id in u) if (vendible(BYID[id])) cart[id] = Math.floor(Number(u[id])) || 0;
   cleanCart(); store.set('expreso.cart', cart); renderCart(); toast('Listo: cargamos tu último pedido');
+}
+
+/* ---------- promo del mes (CONFIG.promo) ---------- */
+function promoActiva(hoy = new Date()) {
+  const pr = CONFIG.promo; if (!pr || !pr.texto) return null;
+  if (pr.hasta) { const h = new Date(pr.hasta + 'T23:59:59'); if (isNaN(h) || hoy > h) return null; }
+  return pr;
+}
+function renderPromo() { const pr = promoActiva(), el = $('#promo'); el.hidden = !pr; el.textContent = pr ? pr.texto : ''; }
+
+/* ---------- recordatorio del carrito al volver (más de 12 h) ---------- */
+function recordarCarrito() {
+  const ahora = Date.now(), antes = Number(store.get('expreso.visto', 0)) || 0, n = totals().n;
+  store.set('expreso.visto', ahora);
+  if (n > 0 && antes && ahora - antes > 12 * 3600e3) {
+    setTimeout(() => { toast(`Tu pedido te espera: ${n} ${n === 1 ? 'producto' : 'productos'}`); $('#cartBtn').classList.add('pulso'); }, 900);
+  }
 }
 
 /* ---------- combos ---------- */
@@ -1343,10 +1368,12 @@ function init() {
   $('#statN').textContent = PRODUCTOS.filter(vendible).length;
   $('#yr').textContent = new Date().getFullYear();
   renderChips(); renderGrid(); renderCart(); renderCiencia(); renderQuiz(); renderTV(); renderFAQ(); renderRedes(); jsonLD();
-  renderReco(); renderKits(); renderCaf();
+  renderReco(); renderKits(); renderCaf(); renderPromo(); recordarCarrito();
   bind(); reveal();
   fichaDesdeHash();
 }
+/* acceso de solo lectura para herramientas y pruebas (los datos ya son públicos en este archivo) */
+window.EXPRESO = { CONFIG, PRODUCTOS, KITS, rerender() { cleanCart(); renderPromo(); renderChips(); renderGrid(); renderKits(); renderCart(); } };
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
 </script>
