@@ -352,6 +352,10 @@ dialog::backdrop{background:rgba(0,0,0,.55);backdrop-filter:blur(3px)}
 @keyframes pulso{50%{transform:scale(1.18)}}
 .cart-b.pulso{animation:pulso .5s ease 3}
 
+.cookies{position:fixed;left:0;right:0;bottom:0;z-index:65;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:.6rem 1.2rem;padding:1rem max(16px,env(safe-area-inset-right,0px)) calc(1rem + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));background:var(--card);border-top:3px solid var(--line);box-shadow:0 -10px 30px rgba(0,0,0,.2);font-size:.88rem}
+.cookies p{margin:0;max-width:60ch}
+.bts2{display:flex;gap:.5rem}
+
 /* ============ ANIMACIÓN ============ */
 .js .rv{transform:translateY(16px);transition:transform .7s ease}
 .js .rv.in{opacity:1;transform:none}
@@ -612,7 +616,7 @@ dialog::backdrop{background:rgba(0,0,0,.55);backdrop-filter:blur(3px)}
    </div>
    <div>
     <h3>Explora</h3>
-    <ul><li><a href="#catalogo">Catálogo</a></li><li><a href="#ciencia">Ciencia</a></li><li><a href="#oportunidad">Oportunidad</a></li><li><button class="linkb" type="button" data-legal="datos">Política de datos</button></li><li><button class="linkb" type="button" data-legal="terminos">Envíos, cambios y retracto</button></li></ul>
+    <ul><li><a href="#catalogo">Catálogo</a></li><li><a href="#ciencia">Ciencia</a></li><li><a href="#oportunidad">Oportunidad</a></li><li><button class="linkb" type="button" data-legal="datos">Política de datos</button></li><li><button class="linkb" type="button" data-legal="terminos">Envíos, cambios y retracto</button></li><li><button class="linkb" type="button" id="ckPref" hidden>Preferencias de cookies</button></li></ul>
    </div>
    <div>
     <h3>Síguenos</h3>
@@ -627,6 +631,7 @@ dialog::backdrop{background:rgba(0,0,0,.55);backdrop-filter:blur(3px)}
 <aside aria-label="Contacto rápido">
 <a class="wa" id="waFloat" href="#" target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp"><svg class="ico"><use href="#i-wa"/></svg><span>¿Hablamos?</span></a>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="cookies" id="cookies" role="dialog" aria-label="Cookies de medición" hidden><p>Usamos cookies de medición (Google Analytics / Meta) para mejorar la tienda y nuestros anuncios. Tú decides. <button class="linkb" type="button" data-legal="datos">Más información</button></p><div class="bts2"><button class="btn btn-a btn-s" type="button" data-ck="si">Aceptar</button><button class="btn btn-s" type="button" data-ck="no">Rechazar</button></div></div>
 <div class="wash" id="waSheet" role="dialog" aria-label="Abrir WhatsApp" hidden><a class="btn btn-a" id="waSheetA" href="#" target="_blank" rel="noopener"><svg class="ico"><use href="#i-wa"/></svg> Abrir WhatsApp con tu mensaje</a><button class="btn btn-s" type="button" id="waSheetX">Cerrar</button></div>
 
 <!-- Carrito -->
@@ -699,6 +704,7 @@ const CONFIG = {
   envio: null,                       // número en COP (ej. 12000) o null = "se confirma según ciudad"
   envioGratisDesde: null,            // ej. 300000, o null para desactivar
   promo: null,                       // ej. { texto:'Envío gratis desde $300.000', hasta:'2026-12-31' } — se oculta sola al vencer
+  analitica: { ga4: '', metaPixel: '' }, // ej. ga4:'G-ABC123XYZ', metaPixel:'123456789012345'. Vacío = sin cookies ni banner
   tiempoEnvio: '2 a 5 días hábiles según la ciudad', // VERIFICAR con la transportadora
   pagos: ['Nequi', 'Daviplata', 'Transferencia Bancolombia', 'Link de pago (tarjeta / PSE)', 'Contraentrega (según ciudad)'],
   redes: { Instagram: '', TikTok: '', YouTube: '', Facebook: '' }, // pega aquí las URL cuando existan
@@ -1003,7 +1009,7 @@ function renderGrid() {
 /* ---------- ficha ---------- */
 let fichaQ = 1;
 function abrirFicha(id) {
-  const p = BYID[id]; if (!p) return; fichaQ = 1;
+  const p = BYID[id]; if (!p) return; fichaQ = 1; track('view_item', evItem(p));
   $('#fichaBody').innerHTML = `
     <div class="mimg">${foto(p)}</div>
     <div>
@@ -1052,7 +1058,7 @@ function setQty(id, q) {
 function addToCart(id, q = 1) {
   if (!vendible(BYID[id])) return;
   setQty(id, (cart[id] || 0) + q);
-  toast('Agregado: ' + BYID[id].nombre + (q > 1 ? ' × ' + q : ''));
+  toast('Agregado: ' + BYID[id].nombre + (q > 1 ? ' × ' + q : '')); track('add_to_cart', evItem(BYID[id], q));
 }
 function renderCart() {
   const t = totals();
@@ -1180,6 +1186,47 @@ function recordarCarrito() {
   }
 }
 
+/* ---------- analítica con consentimiento (inactiva mientras CONFIG.analitica esté vacío) ---------- */
+const AN = { on:false };
+const analiticaConfigurada = () => { const a = CONFIG.analitica || {}; return !!(a.ga4 || a.metaPixel); };
+function consentimiento(preguntar) {
+  const hay = analiticaConfigurada(); $('#ckPref').hidden = !hay;
+  if (!hay) { $('#cookies').hidden = true; return; }
+  const c = store.get('expreso.cookies', null);
+  if (c === 'si') cargarAnalitica();
+  $('#cookies').hidden = !preguntar && (c === 'si' || c === 'no');
+}
+function decidirCookies(v) {
+  store.set('expreso.cookies', v); $('#cookies').hidden = true;
+  if (v === 'si') cargarAnalitica();
+  toast(v === 'si' ? 'Gracias, preferencia guardada' : 'Listo: no usaremos cookies de medición');
+}
+function cargarAnalitica() {
+  if (AN.on) return; AN.on = true; const a = CONFIG.analitica || {};
+  if (/^G-[A-Z0-9]{4,}$/.test(a.ga4 || '')) {
+    const s = document.createElement('script'); s.async = true; s.src = 'https://www.googletagmanager.com/gtag/js?id=' + a.ga4; document.head.appendChild(s);
+    window.dataLayer = window.dataLayer || []; window.gtag = function () { window.dataLayer.push(arguments); };
+    window.gtag('js', new Date()); window.gtag('config', a.ga4);
+  }
+  if (/^\d{6,20}$/.test(a.metaPixel || '')) {
+    /* código base oficial del Meta Pixel */
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    window.fbq('init', a.metaPixel); window.fbq('track', 'PageView');
+  }
+}
+const EV_META = { view_item:'ViewContent', add_to_cart:'AddToCart', begin_checkout:'InitiateCheckout', search:'Search', generate_lead:'Lead' };
+function track(ev, d = {}) {
+  if (!AN.on) return;
+  try { if (window.gtag) window.gtag('event', ev, d.ga || {}); if (window.fbq) window.fbq('track', EV_META[ev], d.meta || {}); } catch (e) { /* nunca romper la tienda por la analítica */ }
+}
+const evItem = (p, q = 1) => ({ ga:{ currency:'COP', value:(p.precio || 0) * q, items:[{ item_id:p.sku, item_name:p.nombre, price:p.precio || 0, quantity:q }] },
+  meta:{ currency:'COP', value:(p.precio || 0) * q, content_ids:[p.sku], content_type:'product' } });
+function evPedido() {
+  const t = totals(), ids = Object.keys(cart);
+  return { ga:{ currency:'COP', value:t.sub, items:ids.map(id => ({ item_id:BYID[id].sku, item_name:BYID[id].nombre, price:BYID[id].precio, quantity:cart[id] })) },
+    meta:{ currency:'COP', value:t.sub, content_ids:ids.map(id => BYID[id].sku), num_items:t.n, content_type:'product' } };
+}
+
 /* ---------- combos ---------- */
 function renderKits() {
   const ks = KITS.map(k => ({ ...k, ps: k.items.map(id => BYID[id]).filter(vendible) })).filter(k => k.ps.length === k.items.length);
@@ -1265,7 +1312,7 @@ const LEGAL = {
   datos: `<h2 id="lT">Política de tratamiento de datos</h2>
     <p>En cumplimiento de la Ley 1581 de 2012 y el Decreto 1377 de 2013, Expreso trata tus datos personales (nombre, ciudad, dirección y celular) solo para atender tus pedidos, hacer seguimiento a tus compras y, si lo autorizas, enviarte información y novedades.</p>
     <h3>Tus derechos</h3><ul class="dot"><li>Conocer, actualizar y rectificar tus datos.</li><li>Pedir prueba de tu autorización.</li><li>Revocar la autorización o pedir que borremos tus datos.</li><li>Presentar quejas ante la Superintendencia de Industria y Comercio.</li></ul>
-    <h3>Cómo funciona esta página</h3><p>Esta página no guarda tus datos en ningún servidor. Tu carrito se guarda solo en tu navegador, y los formularios abren una conversación de WhatsApp con el mensaje listo para que tú decidas si lo envías.</p>
+    <h3>Cómo funciona esta página</h3><p>Esta página no guarda en ningún servidor los datos que escribes en los formularios. Si aceptas las cookies de medición, Google Analytics y/o Meta registran datos de navegación (páginas vistas, clics, tipo de dispositivo) para medir la tienda y los anuncios; puedes rechazarlas o cambiar tu decisión en "Preferencias de cookies", al pie de la página. Tu carrito se guarda solo en tu navegador, y los formularios abren una conversación de WhatsApp con el mensaje listo para que tú decidas si lo envías.</p>
     <h3>Contacto</h3><p>Para ejercer tus derechos escríbenos por el ${esc(CONFIG.contactoDatos)}.</p>`,
   terminos: `<h2 id="lT">Envíos, cambios y retracto</h2>
     <h3>Pedidos</h3><p>Tu pedido se confirma por WhatsApp: disponibilidad, valor del envío y forma de pago. Los precios están en pesos colombianos e incluyen IVA.</p>
@@ -1308,6 +1355,8 @@ function bind() {
     else if (d.legal) abrirLegal(d.legal);
     else if (d.ro) elegirReco(d.ro);
     else if (d.kit) addKit(d.kit);
+    else if (d.ck) decidirCookies(d.ck);
+    else if (t.id === 'ckPref') consentimiento(true);
     else if ('repetir' in d) repetirUltimo();
     else if (d.cf) cafPaso(Number(d.cf), Number(d.cd));
     else if (d.share) { const p = BYID[d.share]; compartir({ title:p.nombre + ' · Expreso', text:p.desc, url:baseURL() + '#p-' + p.id }); }
@@ -1320,7 +1369,7 @@ function bind() {
   const mb = $('#menuBtn'), links = $('#links');
   mb.addEventListener('click', () => { const o = links.classList.toggle('open'); mb.setAttribute('aria-expanded', String(o)); });
   links.addEventListener('click', e => { if (e.target.closest('a')) { links.classList.remove('open'); mb.setAttribute('aria-expanded', 'false'); } });
-  let qT; $('#q').addEventListener('input', e => { clearTimeout(qT); qT = setTimeout(() => { F.q = e.target.value; renderGrid(); }, 120); });
+  let qT; $('#q').addEventListener('input', e => { clearTimeout(qT); qT = setTimeout(() => { F.q = e.target.value; renderGrid(); if (F.q.trim().length > 2) track('search', { ga:{ search_term:F.q.trim() }, meta:{ search_string:F.q.trim() } }); }, 120); });
   $('#orden').addEventListener('change', e => { F.orden = e.target.value; renderGrid(); });
   $('#pedido').addEventListener('submit', e => {
     e.preventDefault(); const f = e.target;
@@ -1330,13 +1379,13 @@ function bind() {
     for (const k in data) data[k] = String(data[k]).trim();
     store.set('expreso.cliente', { nombre:data.nombre, ciudad:data.ciudad });
     store.set('expreso.ultimo', { ...cart });
-    openWA(mensajePedido(data));
+    openWA(mensajePedido(data)); track('begin_checkout', evPedido());
   });
   $('#clubForm').addEventListener('submit', e => {
     e.preventDefault(); const f = e.target;
     if (!f.checkValidity()) { f.reportValidity(); return; }
     const d = Object.fromEntries(new FormData(f));
-    openWA(`Hola Expreso, quiero unirme al Club.\nNombre: ${String(d.nombre).trim()}\nCiudad: ${String(d.ciudad).trim()}\nMe interesa: ${d.interes}\nAutorizo el tratamiento de mis datos (Ley 1581 de 2012).` + origenTxt());
+    openWA(`Hola Expreso, quiero unirme al Club.\nNombre: ${String(d.nombre).trim()}\nCiudad: ${String(d.ciudad).trim()}\nMe interesa: ${d.interes}\nAutorizo el tratamiento de mis datos (Ley 1581 de 2012).` + origenTxt()); track('generate_lead', {});
   });
   $('#refForm').addEventListener('submit', e => {
     e.preventDefault(); const f = e.target;
@@ -1368,12 +1417,12 @@ function init() {
   $('#statN').textContent = PRODUCTOS.filter(vendible).length;
   $('#yr').textContent = new Date().getFullYear();
   renderChips(); renderGrid(); renderCart(); renderCiencia(); renderQuiz(); renderTV(); renderFAQ(); renderRedes(); jsonLD();
-  renderReco(); renderKits(); renderCaf(); renderPromo(); recordarCarrito();
+  renderReco(); renderKits(); renderCaf(); renderPromo(); recordarCarrito(); consentimiento();
   bind(); reveal();
   fichaDesdeHash();
 }
 /* acceso de solo lectura para herramientas y pruebas (los datos ya son públicos en este archivo) */
-window.EXPRESO = { CONFIG, PRODUCTOS, KITS, rerender() { cleanCart(); renderPromo(); renderChips(); renderGrid(); renderKits(); renderCart(); } };
+window.EXPRESO = { CONFIG, PRODUCTOS, KITS, consentimiento, rerender() { cleanCart(); renderPromo(); renderChips(); renderGrid(); renderKits(); renderCart(); } };
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
 </script>

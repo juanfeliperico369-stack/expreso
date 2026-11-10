@@ -30,6 +30,7 @@
 | `GUIA-NEGOCIO.md` | Estrategia y costos del negocio online. |
 | `docs/GUIONES-VIDEOS.md` | 10 guiones de video (gancho, desarrollo, cierre, enlace con UTM) y calendario de 2 semanas. |
 | `docs/WHATSAPP-PLANTILLAS.md` | Respuestas rápidas, etiquetas y secuencia de seguimiento de cada cliente (pedido → recompra → club → negocio). |
+| `tools/admin.py` | **La forma recomendada de hacer cambios del día a día**: `listar`, `whatsapp`, `precio`, `agotado`/`disponible`, `promo`, `envio`, `envio-gratis`, `ga4`, `pixel`, `red`. Valida formatos y edita `index.html` sin romperlo. |
 | `tools/export_catalog.py` | Saca de `PRODUCTOS` el catálogo para Meta (Facebook, Instagram y WhatsApp) y los marketplaces: `export/*.csv` y `assets/catalogo/*.jpg` (800×800). `set_domain.py` lo corre solo. |
 | `docs/EVIDENCIA.md` | Resumen científico con referencias verificadas y reglas de publicidad honesta. |
 | `BITACORA.md` | Este archivo. |
@@ -65,6 +66,7 @@
 5. **`VIDEOS`**: pega la URL de cada video de TikTok, Reels o YouTube en `url` y la tarjeta cambia de "Pronto" a "Ver".
 6. **`FAQ`** y **`LEGAL`**: textos de preguntas frecuentes, política de datos y retracto.
 7. **Después de editar**, corre `node tools/test_site.js`. Debe terminar en "Todas las pruebas pasaron".
+13. **Analítica:** `CONFIG.analitica = { ga4, metaPixel }`, o `python3 tools/admin.py ga4 G-…` y `pixel 123…`. Vacía = no hay banner ni cookies. Con IDs aparece el banner de consentimiento, y solo si el visitante acepta se cargan GA4 y Meta Pixel. Eventos: `view_item`/ViewContent (ficha), `add_to_cart`/AddToCart, `begin_checkout`/InitiateCheckout (pedido enviado a WhatsApp), `search`/Search y `generate_lead`/Lead (Club), todos con el SKU y el valor en COP. El pie trae el botón "Preferencias de cookies".
 11. **Producto agotado:** pon `estado:'agotado'` en el producto. Se muestra la etiqueta "Agotado" y el botón "Avísame" (WhatsApp con su SKU), sale del carrito, sus combos se ocultan y en el catálogo de Meta queda como `out of stock`. Para volver a venderlo, borra esa línea.
 12. **Promo:** `CONFIG.promo = { texto:'…', hasta:'AAAA-MM-DD' }` muestra una franja roja bajo la cabecera y se oculta sola al vencer. `null` = sin promo.
 9. **`KITS`**: combos (`id`, `nombre`, `items[]`, `desc`). El total es la suma de los productos y "Agregar combo" los suma al carrito. No tiene descuento porque el carrito es por producto. Si algún día quieres descuento, hay que guardar el combo como una línea propia del carrito.
@@ -211,3 +213,11 @@ Tarea de hoy: <...>
 4. `window.EXPRESO` (CONFIG, PRODUCTOS, KITS, `rerender()`): acceso para herramientas y pruebas. No expone nada privado, porque los datos ya están en el HTML.
 5. 7 pruebas nuevas (recordatorio a las 48 h, promo vigente y vencida, agotado, combo oculto). Todas pasan.
 6. Se volvió a publicar la vista previa.
+
+### Sesión 10 · 2026-11-10 · v1.0 (analítica + administración)
+1. Analítica con consentimiento: el banner de cookies (Aceptar/Rechazar) solo aparece si hay IDs configurados, y GA4 y Meta Pixel se cargan solo después de "Aceptar". La política de datos explica qué se mide y cómo cambiar la decisión.
+2. 5 eventos de comercio con SKU y valor (ficha, agregar, pedido, búsqueda, club). Con esto Meta puede optimizar las campañas para conversiones (ver la guía §8).
+3. `tools/admin.py`: 11 comandos con validación (número 57 + 10 dígitos, precios numéricos, fechas AAAA-MM-DD, IDs de GA4 y Pixel, URLs https). No deja marcar como agotado un producto "próximamente" y es idempotente (marcar agotado dos veces no duplica nada).
+4. Se probó `admin.py` en una copia con todos los comandos y sus errores, y luego se cargó esa copia en el navegador: 21 productos, promo visible, banner visible, Mocha agotado y 0 errores.
+5. 5 pruebas nuevas de analítica (sin IDs no hay nada; con IDs no carga antes de aceptar; carga al aceptar; eventos con SKU; se puede reabrir la preferencia). Todas pasan.
+6. Se volvió a publicar la vista previa. Las IDs siguen vacías, así que no hay banner.

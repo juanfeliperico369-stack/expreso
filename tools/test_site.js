@@ -196,6 +196,20 @@ const ok = (cond, msg) => { console.log((cond ? '  ✔ ' : '  ✘ ') + msg); if 
   ok(!(await p5.isVisible('#promo')), 'promo vencida se oculta sola');
   await c5.close();
 
+  console.log('Analítica con consentimiento');
+  const c6 = await browser.newContext({ viewport: { width: 1280, height: 860 } });
+  await c6.route(/googletagmanager\.com|connect\.facebook\.net/, r => r.fulfill({ status: 200, contentType: 'application/javascript', body: '' }));
+  const p6 = await c6.newPage(); watch(p6); await p6.goto(URL, { waitUntil: 'load' });
+  ok(!(await p6.isVisible('#cookies')) && !(await p6.isVisible('#ckPref')), 'sin IDs de analítica: ni banner ni cookies');
+  await p6.evaluate(() => { window.EXPRESO.CONFIG.analitica = { ga4: 'G-TEST1234', metaPixel: '1234567890' }; window.EXPRESO.consentimiento(); });
+  ok(await p6.isVisible('#cookies') && !(await p6.evaluate(() => !!window.gtag)), 'con IDs: banner visible y nada cargado antes de aceptar');
+  await p6.click('[data-ck="si"]');
+  ok(await p6.evaluate(() => !!window.gtag && !!window.fbq && !!document.querySelector('script[src*="googletagmanager.com/gtag/js?id=G-TEST1234"]')), 'al aceptar carga GA4 y Meta Pixel');
+  await p6.click('[data-add="tinto"]');
+  ok(await p6.evaluate(() => [...window.dataLayer].some(a => a[0] === 'event' && a[1] === 'add_to_cart' && a[2].items[0].item_id === 'GX-TINTO') && window.fbq.queue.some(a => a[0] === 'track' && a[1] === 'AddToCart')), 'evento add_to_cart / AddToCart con SKU');
+  await p6.click('#ckPref'); ok(await p6.isVisible('#cookies'), 'Preferencias de cookies reabre el banner');
+  await c6.close();
+
   // ---------- Móvil, todos los temas ----------
   console.log('Móvil 375px');
   for (const tema of ['revista', 'cafe', 'bosque', 'contraste']) {
